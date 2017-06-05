@@ -6,7 +6,9 @@ frontend that is built in Go itself (using [GopherJS](https://github.com/gopherj
 a Go&rarr;JavaScript transpiler, and [Vecty](https://github.com/gopherjs/vecty),
 a React-like frontend library for GopherJS).
 
-### Try it: [https://goplay.space &rarr;](https://goplay.space/)
+![demo](https://cloud.githubusercontent.com/assets/1728158/26770686/b3f0a4d0-496d-11e7-8be2-9ab88e856b8c.gif)
+
+### Try it yourself: [https://goplay.space &rarr;](https://goplay.space/)
 
 Main differences from the official Go Playground:
 
