@@ -101,6 +101,7 @@ body.error .header .logo {
 
 .header .settings select option {
     padding: 0;
+    color: initial;
 }
 
 .header .title {
