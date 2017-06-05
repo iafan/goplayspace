@@ -433,6 +433,7 @@ func (a *Application) Render() *vecty.HTML {
 
 	return elem.Body(
 		vecty.ClassMap{
+			"safari":           util.IsSafari(),
 			a.Theme:            true,
 			a.getGlobalState(): true,
 		},

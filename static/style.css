@@ -183,6 +183,11 @@ code, kbd {
 	caret-color: #000;
 }
 
+.safari .editor {
+	color: #000;
+	-webkit-text-fill-color: rgba(0,0,0,0);
+}
+
 .editor, .log, .shadow ol li {
 	white-space: pre-wrap;
 	word-break: break-word;
