@@ -81,6 +81,7 @@ body.error .header .logo {
 .header .settings {
 	position: fixed;
 	right: 1.2em;
+	top: 18px;
 }
 
 .header .settings select {
