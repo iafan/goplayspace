@@ -13,6 +13,7 @@ import (
 	"os"
 	"strconv"
 	"strings"
+	"time"
 )
 
 const staticDir = "../static"
@@ -35,7 +36,7 @@ type FmtResponse struct {
 type CompileEvent struct {
 	Message string
 	Kind    string
-	Delay   int
+	Delay   time.Duration
 }
 
 // CompileResponse is the response returned from
