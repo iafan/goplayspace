@@ -4,7 +4,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/gopherjs/gopherjs/js"
+	"github.com/iafan/goplayspace/client/js/navigator"
 )
 
 // Schedule implements a deferred function call
@@ -15,6 +15,11 @@ func Schedule(f func()) {
 
 // IsSafari returns true if User-Agent is a Safari browser
 func IsSafari() bool {
-	ua := js.Global.Get("navigator").Get("userAgent").String()
+	ua := navigator.UserAgent()
 	return strings.Contains(ua, "Safari") && !strings.Contains(ua, "Chrome")
+}
+
+// IsMacOS returns true under Mac OS
+func IsMacOS() bool {
+	return strings.HasPrefix(navigator.Platform(), "Mac")
 }

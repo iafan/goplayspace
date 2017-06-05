@@ -42,6 +42,7 @@ type Application struct {
 	Hash      *hash.Hash
 	snippetID string
 
+	modifierKey          string
 	isLoading            bool
 	isCompiling          bool
 	isSharing            bool
@@ -413,6 +414,13 @@ func (a *Application) Render() *vecty.HTML {
 		a.Hash = hash.New(a.onHashChange)
 	}
 
+	if a.modifierKey == "" {
+		a.modifierKey = "Ctrl"
+		if util.IsMacOS() {
+			a.modifierKey = "⌘"
+		}
+	}
+
 	a.editor = &editor.Editor{
 		Highlighter:     a.highlight,
 		OnChange:        a.onEditorValueChange,
@@ -449,12 +457,12 @@ func (a *Application) Render() *vecty.HTML {
 					vecty.UnsafeHTML("The Go<br/>Play Space"),
 				),
 				elem.Button(
-					vecty.UnsafeHTML("Run <cmd>⌘+↵</cmd>"),
+					vecty.UnsafeHTML("Run <cmd>"+a.modifierKey+"+↵</cmd>"),
 					vecty.Property("disabled", a.err != "" || a.isCompiling),
 					event.Click(a.runButtonClick),
 				),
 				elem.Button(
-					vecty.UnsafeHTML("Format <cmd>⌘+S</cmd>"),
+					vecty.UnsafeHTML("Format <cmd>"+a.modifierKey+"+S</cmd>"),
 					vecty.Property("disabled", a.err != ""),
 					event.Click(a.formatButtonClick),
 				),
