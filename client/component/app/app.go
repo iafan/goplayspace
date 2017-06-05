@@ -90,6 +90,9 @@ func (a *Application) onEditorKeyDown(e *vecty.Event) {
 	case 13: // Enter
 		if ctrlDown || metaDown { // Ctrl+Enter or Cmd+Enter
 			e.Call("preventDefault")
+			if a.err != "" || a.isCompiling {
+				return
+			}
 			a.doRun()
 		}
 	}
