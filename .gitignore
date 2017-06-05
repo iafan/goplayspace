@@ -1,0 +1,5 @@
+bin/goplayspace
+static/client.js
+*.map
+*.gz
+~*

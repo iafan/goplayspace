@@ -1,0 +1,10 @@
+#!/bin/sh
+
+# This script will compile the client.js and client.js.map
+# files once, and also generate gzipped versions of them.
+
+cd ../client
+gopherjs build -m *.go -o ../static/client.js
+cd ../static
+gzip --best --to-stdout client.js > client.js.gz
+gzip --best --to-stdout client.js.map > client.js.map.gz

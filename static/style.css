@@ -1,0 +1,390 @@
+body {
+	--main-bgcolor: #f3f5f6;
+	--main-color: #000;
+	--link-color: #49e;
+	--header-bgcolor: #fff;
+	--header-color: #000;
+	--footer-bgcolor: #fff;
+	--border-color: #ccc;
+	--warn-bgcolor: rgba(255,153,0,0.1);
+	--error-bgcolor: rgba(255,0,0,0.1);
+	--sel-bgcolor: rgba(255,204,0,0.3);
+	--header-button-bgcolor: #fff;
+	--header-button-border-color: rgba(0,0,0,0.3);
+	--header-button-color: #000;
+
+	--highlight-kwd-color: #d00;
+	--highlight-pln-color: #000;
+	--highlight-str-color: #090;
+	--highlight-pun-color: #666;
+	--highlight-dec-color: #f90;
+	--highlight-typ-color: #49e;
+	--highlight-com-color: #999;
+}
+
+body {
+	font-size: 14px;
+	line-height: 18px;
+	font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+	margin: 0;
+	background: var(--main-bgcolor);
+	color: var(--main-color);
+	overflow: hidden;
+}
+
+a {
+	color: var(--link-color);
+}
+
+.header {
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	width: 100%;
+	height: 55px;
+	box-sizing: border-box;
+	overflow: hidden;
+	z-index: 2;
+	border-bottom: 1px solid var(--border-color);
+	display: flex;
+	align-items: center;
+	background: var(--header-bgcolor);
+	color: var(--header-color);
+}
+
+.header .logo {
+	display: inline-block;
+	width: 63px;
+	height: 48px;
+	background: url(gopher.svg);
+	background-size: cover;
+	position: absolute;
+	bottom: 0;
+	left: 10px;
+}
+
+body.warning .header .logo {
+	background-image: url(warning.svg);
+}
+
+body.error .header .logo {
+	background-image: url(error.svg);
+}
+
+.header .menu {
+	margin-left: 70px;
+	display: flex;
+    align-items: center;
+    position: relative;
+}
+
+.header .settings {
+	position: fixed;
+	right: 1.2em;
+}
+
+.header .settings select {
+       -moz-appearance: none;
+    -webkit-appearance: none;
+            appearance: none;
+
+    outline: none;
+    border: none;
+    background: none;
+    border-bottom: 1px dotted;
+    border-radius: 0;
+    color: inherit;
+    font-size: inherit;
+    padding: 0;
+}
+
+.header .settings select option {
+    padding: 0;
+}
+
+.header .title {
+	margin: 0 1em;
+	display: inline-block;
+}
+
+button {
+	min-width: 6em;
+	font-size: 14px;
+	background: var(--header-button-bgcolor);
+	color: var(--header-button-color);
+	border: 1px solid var(--header-button-border-color);
+	border-radius: 3px;
+	box-shadow: 0 1px 2px rgba(0,0,0,0.2);
+	margin: 0 0.5em;
+	padding: 0.3em 1em;
+}
+
+button[disabled] {
+	opacity: 0.5;
+}
+
+button cmd {
+	opacity: 0.4;
+	font-size: 90%;
+}
+
+.scroller, .help-wrapper {
+	position: absolute;
+	top: 55px;
+	bottom: 25%;
+	width: 50%;
+	box-sizing: border-box;
+}
+
+.scroller {
+	left: 0;
+	border-right: 1px solid var(--border-color);
+	overflow: auto;
+}
+
+.help-wrapper {
+	right: 0;
+	top: 54px; /* 55 - 1px, because of the div#lowframe hack, see `iframe -> top` below */
+	overflow: hidden;
+}
+
+.editor, .shadow, .log, textarea, code, kbd {
+	font-size: 14px;
+	line-height: 18px;
+	font-family: "Fira Code", Menlo, Consolas, monospace;
+}
+
+code, kbd {
+	line-height: 14px;
+}
+
+.editor, .shadow, .log {
+	padding: 0.5em;
+}
+
+.editor, .shadow {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	box-sizing: border-box;
+	overflow: hidden;
+    padding-left: 55px;
+}
+
+.editor {
+	border: 0;
+	margin: 0;
+	background: none;
+	outline: none;
+	resize: none;
+	color: rgba(0,0,0,0);
+	caret-color: #000;
+}
+
+.editor, .log, .shadow ol li {
+	white-space: pre-wrap;
+	word-break: break-word;
+}
+
+.shadow {
+	pointer-events: none;
+}
+
+.shadow ol {
+    margin: 0;
+    padding: 0;
+    counter-reset: li;
+    list-style-type: none;
+}
+
+.shadow ol li {
+    margin: 0;
+    padding: 0;
+    min-height: 18px;
+}
+
+.shadow ol li::before {
+    content: counter(li);
+    margin-left: -40px;
+    display: inline-block;
+    width: 40px;
+    color: rgba(0,0,0,0.4);
+    counter-increment: li;
+    font-size: 10px;
+    text-align: right;
+    box-sizing: border-box;
+    padding-right: 15px;
+    overflow: hidden;
+    height: 18px;
+    float: left;
+	pointer-events: all;
+}
+
+.log {
+	position: absolute;
+	left: 0;
+	right: 0;
+	top:75%;
+	bottom: 0;
+	box-sizing: border-box;
+	border-top: 1px solid var(--border-color);
+	overflow: auto;
+	background: var(--footer-bgcolor);
+}
+
+.log .stderr {
+	color: #d00;
+}
+
+.log .final {
+	opacity: 0.5;
+	font-style: italic;
+	margin-top: 1em;
+}
+
+.log .status::before {
+	content: "›";
+	color: var(--main-color);
+	opacity: 0.5;
+    display: inline-block;
+    margin-left: -1em;
+    width: 1em;
+}
+
+.log .status {
+	color: #0a0;
+	margin-top: 1em;
+	margin-left: 1em;
+}
+
+.log .status.error {
+	color: #d00;
+}
+
+.log .status .prefix {
+	color: rgba(0,0,0,0.5);
+}
+
+/* Help styles */
+
+.help-browser {
+	position: absolute;
+	top: 1px; /* to hide odd 1px div#lowframe on golang.org */
+	left: 0;
+	width: 100%;
+	height: 100%;
+	box-sizing: border-box;
+	border: 0;
+}
+
+.help {
+	height: 100%;
+    box-sizing: border-box;
+	padding: 1em;
+	overflow: auto;
+}
+
+.help h1 {
+	font-size: 20px;
+	font-weight: normal;
+	margin: 0;
+}
+
+.help code {
+	display: inline-block;
+	border: 1px solid rgba(0,0,0,0.2);
+	border-radius: 2px;
+	padding: 0 0.3em;
+}
+
+.help .github-button {
+    position: relative;
+    top: 5px;
+    margin-left: 1em;
+}
+
+/* Syntax highligher (light scheme) */
+
+.kwd {color: var(--highlight-kwd-color)}
+.pln {color: var(--highlight-pln-color)}
+.str {color: var(--highlight-str-color)}
+.pun {color: var(--highlight-pun-color)}
+.dec {color: var(--highlight-dec-color)}
+.typ {color: var(--highlight-typ-color)}
+.com {color: var(--highlight-com-color)}
+
+/* Classic play.golang.org theme */
+
+body.classic {
+	--main-bgcolor: #ffd;
+	--header-bgcolor: hsl(209, 51%, 92%);
+
+	--header-button-bgcolor: #375eab;
+	--header-button-border-color: #375eab;
+	--header-button-color: #fff;
+}
+
+/* Space theme */
+
+body.space {
+	--main-bgcolor: #e8e6e1;
+	--header-bgcolor: #2c2041;
+	--header-color: rgba(255,255,255,0.6);
+	--footer-bgcolor: #f5f5f3;
+	--link-color: #6c45b9;
+	--header-button-bgcolor: rgba(255,255,255,0.15);
+	--header-button-border-color: rgba(255,255,255,0.15);
+	--header-button-color: #e8e6e1;
+
+	--highlight-kwd-color: #cc229d;
+	--highlight-typ-color: #8a67d0;
+}
+
+/* Dark theme */
+
+body.dark {
+	--main-bgcolor: #333;
+	--main-color: #ccc;
+	--link-color: #0bc;
+	--header-bgcolor: #222;
+	--header-color: rgba(255,255,255,0.6);
+	--footer-bgcolor: #222;
+	--border-color: #555;
+	--warn-bgcolor: rgba(255,153,0,0.3);
+	--error-bgcolor: rgba(255,0,0,0.3);
+	--header-button-bgcolor: rgba(255,255,255,0.15);
+	--header-button-border-color: rgba(255,255,255,0.15);
+	--header-button-color: #ccc;
+
+	--highlight-kwd-color: #f47;
+	--highlight-pln-color: #ccc;
+	--highlight-str-color: #0c0;
+	--highlight-pun-color: #999;
+	--highlight-typ-color: #0bc;
+	--highlight-com-color: #777;
+}
+
+.dark .editor {
+	caret-color: #fff;
+}
+
+.dark .editor::selection {
+	background: rgba(255,255,255,0.2);
+}
+
+.dark .editor::-moz-selection {
+	background: rgba(255,255,255,0.2);
+}
+
+.dark .shadow ol li::before {
+    color: rgba(255,255,255,0.3);
+}
+
+.dark .log .status .prefix {
+	color: rgba(255,255,255,0.5);
+}
+
+.dark .log .status.error {
+    color: #f66;
+}

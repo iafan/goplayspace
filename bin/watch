@@ -1,0 +1,12 @@
+#!/bin/sh
+
+# This script watches for changes in ../client/
+# and its dependencies and dynamically re-generates ../static/client.js
+#
+# If you had pre-compiled .gz files in ../static, this script will remove those,
+# but you will need to restart the server for it to start serving non-gzipped
+# version of client.js and client.js.map.
+
+cd ../client
+rm *.gz
+gopherjs build -m -w *.go -o ../static/client.js

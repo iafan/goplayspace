@@ -1,0 +1,9 @@
+#!/bin/sh
+
+BINARY=goplayspace
+
+if [ -f $BINARY ] ; then
+    rm $BINARY
+fi
+
+go build -o $BINARY ../server/*.go
