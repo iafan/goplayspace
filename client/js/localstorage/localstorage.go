@@ -4,7 +4,11 @@ import "github.com/gopherjs/gopherjs/js"
 
 // Get is a wrapper for localStorage.getItem
 func Get(key string) string {
-	return js.Global.Get("localStorage").Call("getItem", key).String()
+	v := js.Global.Get("localStorage").Call("getItem", key)
+	if v == nil {
+		return ""
+	}
+	return v.String()
 }
 
 // Set is a wrapper for localStorage.setItem
