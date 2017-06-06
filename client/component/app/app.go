@@ -43,6 +43,8 @@ type Application struct {
 	// Settings
 	Theme            string
 	TabWidth         int
+	FontWeight       string
+	UseWebfont       bool
 	HighlightingMode bool
 
 	Hash      *hash.Hash
@@ -380,16 +382,51 @@ func (a *Application) getGlobalState() (out string) {
 	return
 }
 
-func (a *Application) updateTheme(name string) {
-	a.Theme = name
-	localstorage.Set("theme", name)
+func (a *Application) getFiraFontCSS(weight, suffix string) string {
+	return `@font-face {
+	font-family: 'Fira Code';
+	font-weight: ` + weight + `;
+	src: url('https://raw.githubusercontent.com/tonsky/FiraCode/master/distr/woff2/FiraCode-` + suffix + `.woff2') format('woff2');
+}`
+}
+
+func (a *Application) getOverrideCSS() (out string) {
+	if a.UseWebfont {
+		if a.FontWeight == "normal" {
+			out += a.getFiraFontCSS(a.FontWeight, "Regular")
+		} else {
+			out += a.getFiraFontCSS(a.FontWeight, "Light")
+		}
+	}
+
+	out += `.editor, .shadow, .log {
+	font-weight: ` + a.FontWeight + `;
+}`
+	return out
+}
+
+func (a *Application) updateTheme(val string) {
+	a.Theme = val
+	localstorage.Set("theme", val)
 	a.wantRerender("updateTheme")
 }
 
-func (a *Application) updateTabWidth(w int) {
-	a.TabWidth = w
-	localstorage.Set("tab-width", w)
+func (a *Application) updateTabWidth(val int) {
+	a.TabWidth = val
+	localstorage.Set("tab-width", val)
 	a.wantRerender("updateTabWidth")
+}
+
+func (a *Application) updateFontWeight(val string) {
+	a.FontWeight = val
+	localstorage.Set("font-weight", val)
+	a.wantRerender("updateFontWeight")
+}
+
+func (a *Application) updateUseWebfont(val bool) {
+	a.UseWebfont = val
+	localstorage.Set("use-webfont", val)
+	a.wantRerender("updateUseWebfont")
 }
 
 func (a *Application) updateHighlighting(on bool) {
@@ -403,9 +440,19 @@ func (a *Application) onSettingsChange(d *settings.Dialog) {
 	if d.Theme != a.Theme {
 		a.updateTheme(d.Theme)
 	}
+
 	if d.TabWidth != a.TabWidth {
 		a.updateTabWidth(d.TabWidth)
 	}
+
+	if d.FontWeight != a.FontWeight {
+		a.updateFontWeight(d.FontWeight)
+	}
+
+	if d.UseWebfont != a.UseWebfont {
+		a.updateUseWebfont(d.UseWebfont)
+	}
+
 	if d.HighlightingMode != a.HighlightingMode {
 		a.updateHighlighting(d.HighlightingMode)
 	}
@@ -539,8 +586,13 @@ func (a *Application) Render() *vecty.HTML {
 		vecty.If(a.showSettings, &settings.Dialog{
 			Theme:            a.Theme,
 			TabWidth:         a.TabWidth,
+			FontWeight:       a.FontWeight,
+			UseWebfont:       a.UseWebfont,
 			HighlightingMode: a.HighlightingMode,
 			OnChange:         a.onSettingsChange,
 		}),
+		elem.Style(
+			vecty.UnsafeHTML(a.getOverrideCSS()),
+		),
 	)
 }

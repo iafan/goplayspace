@@ -26,7 +26,7 @@ Main differences from the official Go Playground:
    <kbd>Cmd</kbd> and <kbd>Ctrl</kbd> keys work interchangeably
 7. Support for several UI themes
 8. Support for [Fira Code](https://github.com/tonsky/FiraCode) font
-   (if it is installed in your system)
+   (either the one installed in your system or a webfont)
 9. `go imports` is always run before running your code, so you don't usually
    have to worry about imports at all
 

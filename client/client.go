@@ -12,6 +12,8 @@ func main() {
 	a := &app.Application{
 		Theme:            localstorage.Get("theme", "light"),
 		TabWidth:         localstorage.GetInt("tab-width", 4),
+		FontWeight:       localstorage.Get("font-weight", "normal"),
+		UseWebfont:       localstorage.GetBool("use-webfont", false),
 		HighlightingMode: localstorage.GetBool("highlighting", true),
 	}
 

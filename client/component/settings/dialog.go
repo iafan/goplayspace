@@ -14,6 +14,8 @@ type Dialog struct {
 
 	Theme            string
 	TabWidth         int
+	FontWeight       string
+	UseWebfont       bool
 	HighlightingMode bool
 
 	OnChange func(d *Dialog)
@@ -35,6 +37,16 @@ func (d *Dialog) updateTheme(e *vecty.Event) {
 
 func (d *Dialog) updateTabWidth(e *vecty.Event) {
 	d.TabWidth = e.Target.Get("value").Int()
+	d.fireOnChangeEvent()
+}
+
+func (d *Dialog) updateFontWeight(e *vecty.Event) {
+	d.FontWeight = e.Target.Get("value").String()
+	d.fireOnChangeEvent()
+}
+
+func (d *Dialog) updateUseWebfont(e *vecty.Event) {
+	d.UseWebfont = e.Target.Get("value").Bool()
 	d.fireOnChangeEvent()
 }
 
@@ -107,6 +119,42 @@ func (d *Dialog) Render() *vecty.HTML {
 					vecty.Text("8"),
 				),
 				event.Change(d.updateTabWidth),
+			),
+		),
+		elem.Paragraph(
+			elem.Div(
+				vecty.Text("Font weight:"),
+			),
+			elem.Select(
+				elem.Option(
+					vecty.Property("value", "lighter"),
+					vecty.Property("selected", d.FontWeight == "lighter"),
+					vecty.Text("Lighter"),
+				),
+				elem.Option(
+					vecty.Property("value", "normal"),
+					vecty.Property("selected", d.FontWeight == "normal"),
+					vecty.Text("Normal"),
+				),
+				event.Change(d.updateFontWeight),
+			),
+		),
+		elem.Paragraph(
+			elem.Div(
+				vecty.Text("‘Fira Code’ font source:"),
+			),
+			elem.Select(
+				elem.Option(
+					vecty.Property("value", ""),
+					vecty.Property("selected", !d.UseWebfont),
+					vecty.Text("System"),
+				),
+				elem.Option(
+					vecty.Property("value", 1),
+					vecty.Property("selected", d.UseWebfont),
+					vecty.Text("Webfont"),
+				),
+				event.Change(d.updateUseWebfont),
 			),
 		),
 		elem.Paragraph(
