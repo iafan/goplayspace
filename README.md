@@ -33,7 +33,7 @@ Main differences from the official Go Playground:
 Code execution is proxied to the official Go Playground, so your programs will work the same.
 Shared snippets are also stored on golang.org servers.
 
-Runnning Locally
+Running Locally
 ----------------
 
 Download the package:
