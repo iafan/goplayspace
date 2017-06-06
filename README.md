@@ -36,12 +36,6 @@ Shared snippets are also stored on golang.org servers.
 Running Locally
 ----------------
 
-Install (or update) GopherJS:
-
-```sh
-$ go get -u github.com/gopherjs/gopherjs
-```
-
 Download the package:
 
 ```sh
@@ -61,6 +55,11 @@ $ ./goplayspace
 ```
 
 Then open http://localhost:8080/ in your browser.
+
+Troubleshooting
+---------------
+
+If you have trouble compiling the client, please make sure you have the latest version of GopherJS installed by running `go get -u github.com/gopherjs/gopherjs` (see #6)
 
 Credits
 -------
