@@ -6,6 +6,7 @@ import (
 	"go/parser"
 	"go/token"
 	"regexp"
+	"strconv"
 	"strings"
 	"time"
 
@@ -19,6 +20,7 @@ import (
 	"github.com/iafan/goplayspace/client/component/editor"
 	"github.com/iafan/goplayspace/client/component/help"
 	"github.com/iafan/goplayspace/client/component/log"
+	"github.com/iafan/goplayspace/client/component/settings"
 	"github.com/iafan/goplayspace/client/hash"
 	"github.com/iafan/goplayspace/client/js/console"
 	"github.com/iafan/goplayspace/client/js/localstorage"
@@ -37,7 +39,11 @@ type Application struct {
 	Input   string
 	Topic   string
 	Imports map[string]string
-	Theme   string
+
+	// Settings
+	Theme            string
+	TabWidth         int
+	HighlightingMode bool
 
 	Hash      *hash.Hash
 	snippetID string
@@ -48,6 +54,7 @@ type Application struct {
 	isSharing            bool
 	hasCompilationErrors bool
 	needRender           bool
+	showSettings         bool
 
 	// Log properties
 	hasRun bool
@@ -193,7 +200,6 @@ func (a *Application) doShareAsyncComplete() {
 }
 
 func (a *Application) onHashChange(h *hash.Hash) {
-	console.Log("onHashChange()")
 	if h.ID != "" {
 		a.doLoad(h.ID)
 	}
@@ -374,10 +380,35 @@ func (a *Application) getGlobalState() (out string) {
 	return
 }
 
-func (a *Application) updateTheme(e *vecty.Event) {
-	a.Theme = e.Target.Get("value").String()
-	localstorage.Set("theme", a.Theme)
+func (a *Application) updateTheme(name string) {
+	a.Theme = name
+	localstorage.Set("theme", name)
 	a.wantRerender("updateTheme")
+}
+
+func (a *Application) updateTabWidth(w int) {
+	a.TabWidth = w
+	localstorage.Set("tab-width", w)
+	a.wantRerender("updateTabWidth")
+}
+
+func (a *Application) updateHighlighting(on bool) {
+	a.HighlightingMode = on
+	localstorage.Set("highlighting", on)
+	a.editor.Highlight(on)
+	a.wantRerender("updateHighlighting")
+}
+
+func (a *Application) onSettingsChange(d *settings.Dialog) {
+	if d.Theme != a.Theme {
+		a.updateTheme(d.Theme)
+	}
+	if d.TabWidth != a.TabWidth {
+		a.updateTabWidth(d.TabWidth)
+	}
+	if d.HighlightingMode != a.HighlightingMode {
+		a.updateHighlighting(d.HighlightingMode)
+	}
 }
 
 func (a *Application) formatShortcutPressed(e interface{}) {
@@ -405,6 +436,11 @@ func (a *Application) onPageLoaded() {
 	}
 }
 
+func (a *Application) settingsButtonClick(e *vecty.Event) {
+	a.showSettings = !a.showSettings
+	a.wantRerender("settingsButtonClick")
+}
+
 // Render renders the application
 func (a *Application) Render() *vecty.HTML {
 	//console.Time("app:render")
@@ -422,15 +458,15 @@ func (a *Application) Render() *vecty.HTML {
 	}
 
 	a.editor = &editor.Editor{
-		Highlighter:     a.highlight,
-		OnChange:        a.onEditorValueChange,
-		OnLineSelChange: a.onLineSelChange,
-		OnTopicChange:   a.onEditorTopicChange,
-		OnKeyDown:       a.onEditorKeyDown,
-		WarningLines:    a.warningLines,
-		ErrorLines:      a.errorLines,
-		Range:           ranges.New(a.Hash.Ranges),
-		//InitialValue:    a.Input,
+		Highlighter:      a.highlight,
+		OnChange:         a.onEditorValueChange,
+		OnLineSelChange:  a.onLineSelChange,
+		OnTopicChange:    a.onEditorTopicChange,
+		OnKeyDown:        a.onEditorKeyDown,
+		WarningLines:     a.warningLines,
+		ErrorLines:       a.errorLines,
+		Range:            ranges.New(a.Hash.Ranges),
+		HighlightingMode: a.HighlightingMode,
 	}
 
 	a.log = &log.Log{
@@ -439,10 +475,13 @@ func (a *Application) Render() *vecty.HTML {
 		HasRun: a.hasRun,
 	}
 
+	tabWidthClass := "tabwidth-" + strconv.Itoa(a.TabWidth)
+
 	return elem.Body(
 		vecty.ClassMap{
 			"safari":           util.IsSafari(),
 			a.Theme:            true,
+			tabWidthClass:      true,
 			a.getGlobalState(): true,
 		},
 		elem.Div(
@@ -474,29 +513,9 @@ func (a *Application) Render() *vecty.HTML {
 			),
 			elem.Div(
 				vecty.ClassMap{"settings": true},
-				vecty.Text("Theme: "),
-				elem.Select(
-					elem.Option(
-						vecty.Property("value", "space"),
-						vecty.Property("selected", a.Theme == "space"),
-						vecty.Text("Space"),
-					),
-					elem.Option(
-						vecty.Property("value", "classic"),
-						vecty.Property("selected", a.Theme == "classic"),
-						vecty.Text("Classic"),
-					),
-					elem.Option(
-						vecty.Property("value", "light"),
-						vecty.Property("selected", a.Theme == "light"),
-						vecty.Text("Light"),
-					),
-					elem.Option(
-						vecty.Property("value", "dark"),
-						vecty.Property("selected", a.Theme == "dark"),
-						vecty.Text("Dark"),
-					),
-					event.Change(a.updateTheme),
+				elem.Button(
+					vecty.UnsafeHTML("Settings"),
+					event.Click(a.settingsButtonClick),
 				),
 			),
 		),
@@ -517,5 +536,11 @@ func (a *Application) Render() *vecty.HTML {
 			}(),
 		),
 		a.log,
+		vecty.If(a.showSettings, &settings.Dialog{
+			Theme:            a.Theme,
+			TabWidth:         a.TabWidth,
+			HighlightingMode: a.HighlightingMode,
+			OnChange:         a.onSettingsChange,
+		}),
 	)
 }

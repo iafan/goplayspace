@@ -9,13 +9,10 @@ import (
 func main() {
 	vecty.SetTitle(app.PageTitle)
 
-	theme := localstorage.Get("theme")
-	if theme == "" {
-		theme = "light"
-	}
-
 	a := &app.Application{
-		Theme: theme,
+		Theme:            localstorage.Get("theme", "light"),
+		TabWidth:         localstorage.GetInt("tab-width", 4),
+		HighlightingMode: localstorage.GetBool("highlighting", true),
 	}
 
 	vecty.RenderBody(a)

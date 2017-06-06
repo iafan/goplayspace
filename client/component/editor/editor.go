@@ -30,10 +30,11 @@ type Editor struct {
 	errorsCSS   string
 	warningsCSS string
 
-	InitialValue string
-	Range        *ranges.Range
-	ErrorLines   map[string]bool
-	WarningLines map[string]bool
+	InitialValue     string
+	Range            *ranges.Range
+	HighlightingMode bool
+	ErrorLines       map[string]bool
+	WarningLines     map[string]bool
 
 	Highlighter     func(s string) string
 	OnTopicChange   func(topic string)
@@ -86,7 +87,6 @@ func (ed *Editor) SetSelection(start, end int) {
 }
 
 func (ed *Editor) updateSelectionInfo(e *vecty.Event) {
-	//console.Log("editor.updateSelectionInfo()")
 	if ed.getTextarea() == nil || ed.OnTopicChange == nil {
 		return
 	}
@@ -144,6 +144,23 @@ func (ed *Editor) makeHighlightedText(text string) string {
 	return "<ol>\n" + strings.Join(a, "") + "</ol>"
 }
 
+// Highlight applies highlighting to the editor
+func (ed *Editor) Highlight(on bool) {
+	if ed.getTextarea() == nil {
+		console.Log("editor.Highlight(): getTextarea() is nil!")
+		return
+	}
+	text := ed.ta.GetValue()
+	ed.highlighted = ""
+	if on && ed.Highlighter != nil {
+		ed.highlighted = ed.Highlighter(text)
+	}
+	if ed.highlighted == "" {
+		ed.highlighted = ed.makeHighlightedText(text)
+	}
+	ed.resizeTextarea()
+}
+
 func (ed *Editor) onChange(e *vecty.Event) {
 	if ed.getTextarea() == nil {
 		console.Log("editor.onChange(): getTextarea() is nil!")
@@ -153,15 +170,7 @@ func (ed *Editor) onChange(e *vecty.Event) {
 	ed.Range = nil
 	ed.WarningLines = nil
 	ed.ErrorLines = nil
-	text := ed.ta.GetValue()
-	ed.highlighted = ""
-	if ed.Highlighter != nil {
-		ed.highlighted = ed.Highlighter(text)
-	}
-	if ed.highlighted == "" {
-		ed.highlighted = ed.makeHighlightedText(text)
-	}
-	ed.resizeTextarea()
+	ed.Highlight(ed.HighlightingMode)
 
 	ed.fireOnChangeEvent()
 	if shouldFireSelChange {
