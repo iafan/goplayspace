@@ -36,6 +36,12 @@ Shared snippets are also stored on golang.org servers.
 Running Locally
 ----------------
 
+Install (or update) GopherJS:
+
+```sh
+$ go get -u github.com/gopherjs/gopherjs
+```
+
 Download the package:
 
 ```sh
