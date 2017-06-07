@@ -4,6 +4,7 @@ import (
 	"html"
 	"strconv"
 	"strings"
+	"time"
 
 	"github.com/gopherjs/gopherjs/js"
 	"github.com/gopherjs/vecty"
@@ -225,6 +226,10 @@ func (ed *Editor) resetLineSelection() {
 func (ed *Editor) toggleLine(n int) {
 	defer ed.fireOnLineSelChangeEvent()
 
+	if ed.Range == nil {
+		ed.Range = &ranges.Range{}
+	}
+
 	if ed.shiftDown {
 		ed.Range.AddSelPoint(n)
 		return
@@ -306,6 +311,10 @@ func (ed *Editor) handleScrollerClick(e *vecty.Event) {
 
 func (ed *Editor) afterRender() {
 	list := js.Global.Get("document").Call("querySelectorAll", ".shadow ol li")
+	if list == nil || list.Length() == 0 {
+		time.AfterFunc(5*time.Millisecond, ed.afterRender)
+		return
+	}
 	n := list.Length()
 	for i := 0; i < n; i++ {
 		list.Index(i).Set("onmousedown", ed.handleShadowMouseDown)

@@ -41,7 +41,7 @@ func (r *Range) String() string {
 
 // HasSelection returns true if there's some selection
 func (r *Range) HasSelection() bool {
-	return len(r.Sel) > 0
+	return r != nil && len(r.Sel) > 0
 }
 
 // ClearSelection clears selection
