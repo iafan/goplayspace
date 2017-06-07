@@ -569,18 +569,14 @@ func (a *Application) Render() *vecty.HTML {
 		a.editor,
 		elem.Div(
 			vecty.ClassMap{"help-wrapper": true},
-			func() vecty.MarkupOrComponentOrHTML {
-				if a.Topic == "" {
-					return elem.Div(
-						vecty.ClassMap{"help": true},
-						vecty.UnsafeHTML(helpHTML),
-					)
-				}
-				return &help.Browser{
-					Imports: a.Imports,
-					Topic:   a.Topic,
-				}
-			}(),
+			vecty.If(a.Topic == "", elem.Div(
+				vecty.ClassMap{"help": true},
+				vecty.UnsafeHTML(helpHTML),
+			)),
+			vecty.If(a.Topic != "", &help.Browser{
+				Imports: a.Imports,
+				Topic:   a.Topic,
+			}),
 		),
 		a.log,
 		vecty.If(a.showSettings, &settings.Dialog{
