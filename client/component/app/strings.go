@@ -24,9 +24,9 @@ var helpHTML = `
 		<li>Live syntax error checking</li>
 		<li>Error line highlighting (both for syntax errors and for errors returned from the compiler)</li>
 		<li>Ability to highlight lines and blocks of code (like on Github, but better!) — just click on the line numbers. Use <kbd>Shift</kbd> and <kbd>Ctrl</kbd> to modify the selection</li>
-		<li>Keyboard shortcuts (see button captions). Note that both <kbd>Cmd</kbd> and <kbd>Ctrl</kbd> keys work interchangeably</li>
-		<li>Support for several UI themes (see the switcher in the top right corner)</li>
-		<li>Support for <a href="https://github.com/tonsky/FiraCode">Fira Code</a> font (if it is installed in your system)</li>
+		<li>Keyboard shortcuts (see button captions)</li>
+		<li>Support for several UI themes and UI tweaks (see the Settings button)</li>
+		<li>Support for <a href="https://github.com/tonsky/FiraCode">Fira Code</a> font (either the one installed in your system or a webfont)</li>
 		<li><code>go imports</code> is always run before running your code, so you don't usually have to worry
 		about imports at all</li>
 	</ol>

@@ -22,8 +22,7 @@ Main differences from the official Go Playground:
 5. Ability to highlight lines and blocks of code (like on Github, but better!) —
    just click on the line numbers. Use <kbd>Shift</kbd> and <kbd>Ctrl</kbd>
    to modify the selection
-6. Keyboard shortcuts (see button captions). Note that both
-   <kbd>Cmd</kbd> and <kbd>Ctrl</kbd> keys work interchangeably
+6. Keyboard shortcuts (see button captions)
 7. Support for several UI themes
 8. Support for [Fira Code](https://github.com/tonsky/FiraCode) font
    (either the one installed in your system or a webfont)
