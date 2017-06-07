@@ -21,6 +21,7 @@ import (
 	"github.com/iafan/goplayspace/client/component/help"
 	"github.com/iafan/goplayspace/client/component/log"
 	"github.com/iafan/goplayspace/client/component/settings"
+	"github.com/iafan/goplayspace/client/component/splitter"
 	"github.com/iafan/goplayspace/client/hash"
 	"github.com/iafan/goplayspace/client/js/console"
 	"github.com/iafan/goplayspace/client/js/localstorage"
@@ -566,19 +567,40 @@ func (a *Application) Render() *vecty.HTML {
 				),
 			),
 		),
-		a.editor,
 		elem.Div(
-			vecty.ClassMap{"help-wrapper": true},
-			vecty.If(a.Topic == "", elem.Div(
-				vecty.ClassMap{"help": true},
-				vecty.UnsafeHTML(helpHTML),
-			)),
-			vecty.If(a.Topic != "", &help.Browser{
-				Imports: a.Imports,
-				Topic:   a.Topic,
-			}),
+			vecty.ClassMap{"body-wrapper": true},
+			elem.Div(
+				vecty.ClassMap{"content-wrapper": true},
+				a.editor,
+				elem.Div(
+					vecty.ClassMap{"help-wrapper": true},
+					vecty.If(a.Topic == "", elem.Div(
+						vecty.ClassMap{"help": true},
+						vecty.UnsafeHTML(helpHTML),
+					)),
+					vecty.If(a.Topic != "", &help.Browser{
+						Imports: a.Imports,
+						Topic:   a.Topic,
+					}),
+					&splitter.Splitter{
+						Selector:         ".help-wrapper",
+						OppositeSelector: ".scroller",
+						Type:             splitter.RightPane,
+						MinSizePercent:   2,
+					},
+				),
+			),
+			elem.Div(
+				vecty.ClassMap{"log-wrapper": true},
+				a.log,
+				&splitter.Splitter{
+					Selector:         ".log-wrapper",
+					OppositeSelector: ".content-wrapper",
+					Type:             splitter.BottomPane,
+					MinSizePercent:   2,
+				},
+			),
 		),
-		a.log,
 		vecty.If(a.showSettings, &settings.Dialog{
 			Theme:            a.Theme,
 			TabWidth:         a.TabWidth,
