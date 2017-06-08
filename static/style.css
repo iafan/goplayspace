@@ -232,7 +232,7 @@ code, kbd {
 
 .editor, .log, .shadow ol li {
 	white-space: pre-wrap;
-	word-break: break-word;
+	word-wrap: break-word;
 }
 
 .shadow {
