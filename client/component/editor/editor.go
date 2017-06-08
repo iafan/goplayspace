@@ -266,6 +266,25 @@ func (ed *Editor) toggleLineSelection() {
 	ed.toggleLine(line)
 }
 
+func (ed *Editor) getIndent() string {
+	if ed.getTextarea() == nil {
+		return ""
+	}
+	ss := ed.ta.GetSelectionStart()
+	s := ed.ta.GetValue()[:ss]
+	i := strings.LastIndex(s, "\n")
+	if i > 0 {
+		s = s[i+1:]
+	}
+	for i = 0; i < len(s); i++ {
+		if s[i] != '\t' {
+			break
+		}
+	}
+
+	return strings.Repeat("\t", i)
+}
+
 func (ed *Editor) handleKeyDown(e *vecty.Event) {
 	ed.shiftDown = e.Get("shiftKey").Bool()
 	ed.ctrlDown = e.Get("ctrlKey").Bool()
@@ -276,18 +295,26 @@ func (ed *Editor) handleKeyDown(e *vecty.Event) {
 		if ed.ctrlDown { // Ctrl+T
 			e.Call("preventDefault")
 			ed.toggleLineSelection()
+			return
 		}
 	case 9: // Tab
 		e.Call("preventDefault")
 		ed.InsertText("\t")
-		util.Schedule(ed.Focus)
+		return
+	case 13: // Enter
+		if !ed.shiftDown && !ed.ctrlDown && !ed.metaDown {
+			e.Call("preventDefault")
+			ed.InsertText("\n" + ed.getIndent())
+			return
+		}
 	case 27: // Esc
 		e.Call("preventDefault")
 		ed.resetLineSelection()
-	default:
-		if ed.OnKeyDown != nil {
-			ed.OnKeyDown(e)
-		}
+		return
+	}
+
+	if ed.OnKeyDown != nil {
+		ed.OnKeyDown(e)
 	}
 }
 
