@@ -135,6 +135,8 @@ func (a *Application) doRun() {
 func (a *Application) doRunAsync() {
 	defer a.doRunAsyncComplete()
 
+	a.hasRun = true
+
 	bodyBytes, err := xhr.Send("POST", "/compile", []byte(a.Input))
 	if err != nil {
 		a.err = err.Error()
@@ -151,7 +153,6 @@ func (a *Application) doRunAsync() {
 
 	a.err = compileResponse.Errors
 	a.events = compileResponse.Events
-	a.hasRun = true
 	a.hasCompilationErrors = a.err != ""
 
 	if compileResponse.Body != nil {
