@@ -138,6 +138,10 @@ button cmd {
 	font-size: 90%;
 }
 
+.ios button cmd {
+	display: none;
+}
+
 .body-wrapper {
 	position: absolute;
 	top: 55px;
