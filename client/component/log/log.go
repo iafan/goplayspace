@@ -1,11 +1,17 @@
 package log
 
 import (
+	"strconv"
+	"time"
+
 	"github.com/gopherjs/gopherjs/js"
 	"github.com/gopherjs/vecty"
 	"github.com/gopherjs/vecty/elem"
 	"github.com/iafan/goplayspace/client/api"
 )
+
+var hour = 60 * time.Minute
+var day = 24 * hour
 
 // Log contains the logic behind the log panel
 // exposed on the applicaiton page under '.log' class
@@ -31,10 +37,39 @@ func (l *Log) getEvents() []vecty.MarkupOrComponentOrHTML {
 	}
 	out := make([]vecty.MarkupOrComponentOrHTML, len(l.Events)+1)
 
+	var totalDelay time.Duration
+	for _, evt := range l.Events {
+		totalDelay += evt.Delay
+	}
+
+	format := "T+15:04:05"
+	totalDays := int(totalDelay / day)
+
+	if totalDelay < hour {
+		format = "T+04:05.000"
+	}
+	if totalDelay < time.Minute {
+		format = "T+05.000000"
+	}
+	if totalDelay < time.Millisecond {
+		format = "T+05.000000000"
+	}
+
+	deltaTime := time.Time{}
+	var deltaDuration time.Duration
 	for i, evt := range l.Events {
+		deltaTime = deltaTime.Add(evt.Delay)
+		deltaDuration += evt.Delay
+		text := deltaTime.Format(format)
+		if totalDays > 0 {
+			text = "D+" + strconv.Itoa(int(deltaDuration/day)) + " " + text
+		}
 		out[i] = elem.Div(
 			vecty.ClassMap{evt.Kind: true},
-			//vecty.Text("["+strconv.Itoa(evt.Delay)+"] "+evt.Message), // FIXME: show timings only when necessary
+			vecty.If(totalDelay > 0, elem.Span(
+				vecty.ClassMap{"time": true},
+				vecty.Text(text),
+			)),
 			vecty.Text(evt.Message),
 		)
 	}

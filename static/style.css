@@ -267,6 +267,11 @@ code, kbd {
 	background: var(--footer-bgcolor);
 }
 
+.log .time {
+    padding-right: 1em;
+    opacity: 0.5;
+}
+
 .log .stderr {
 	color: #d00;
 }
