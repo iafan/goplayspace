@@ -528,6 +528,7 @@ func (a *Application) Render() *vecty.HTML {
 	return elem.Body(
 		vecty.ClassMap{
 			"safari":           util.IsSafari(),
+			"ios":              util.IsIOS(),
 			a.Theme:            true,
 			tabWidthClass:      true,
 			a.getGlobalState(): true,

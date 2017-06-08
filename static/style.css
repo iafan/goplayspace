@@ -28,6 +28,7 @@ body {
 body {
 	font-size: 14px;
 	line-height: 18px;
+	-webkit-text-size-adjust: none;
 	font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
 	margin: 0;
 	background: var(--main-bgcolor);
@@ -218,6 +219,11 @@ code, kbd {
 .safari .editor {
 	color: #000;
 	-webkit-text-fill-color: rgba(0,0,0,0);
+}
+
+.ios .editor {
+	/* see https://stackoverflow.com/questions/6890149/remove-3-pixels-in-ios-webkit-textarea */
+	margin-left: -3px;
 }
 
 .editor, .log, .shadow ol li {

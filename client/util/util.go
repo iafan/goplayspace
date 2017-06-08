@@ -23,3 +23,9 @@ func IsSafari() bool {
 func IsMacOS() bool {
 	return strings.HasPrefix(navigator.Platform(), "Mac")
 }
+
+// IsIOS returns true under iOS
+func IsIOS() bool {
+	p := navigator.Platform()
+	return strings.HasPrefix(p, "iPhone") || strings.HasPrefix(p, "iPad") || strings.HasPrefix(p, "iPod")
+}
