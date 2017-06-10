@@ -18,6 +18,7 @@ import (
 
 	"github.com/iafan/goplayspace/client/api"
 	"github.com/iafan/goplayspace/client/component/editor"
+	"github.com/iafan/goplayspace/client/component/editor/undo"
 	"github.com/iafan/goplayspace/client/component/help"
 	"github.com/iafan/goplayspace/client/component/log"
 	"github.com/iafan/goplayspace/client/component/settings"
@@ -29,6 +30,8 @@ import (
 	"github.com/iafan/goplayspace/client/util"
 	"github.com/iafan/syntaxhighlight"
 )
+
+const maxUndoStackSize uint = 50
 
 // Application implements the main application view
 type Application struct {
@@ -67,6 +70,7 @@ type Application struct {
 	// Editor properties
 	warningLines map[string]bool
 	errorLines   map[string]bool
+	undoStack    *undo.Stack
 }
 
 func (a *Application) rerenderIfNeeded() {
@@ -291,6 +295,16 @@ func (a *Application) setEditorText(text string) {
 	util.Schedule(a.editor.Focus)
 }
 
+func (a *Application) setEditorState(text string, selStart, selEnd int) {
+	if a.Input == text {
+		return
+	}
+	a.Input = text
+	a.parseAndReportErrors(text)
+	a.editor.SetState(text, selStart, selEnd)
+	util.Schedule(a.editor.Focus)
+}
+
 func (a *Application) onEditorValueChange(text string) {
 	if a.Input == text {
 		return
@@ -308,8 +322,7 @@ func (a *Application) parseAndReportErrors(text string) {
 	a.hasCompilationErrors = false
 
 	if text == "" {
-		a.setEditorText(blankTemplate)
-		a.editor.SetSelection(blankTemplatePos, blankTemplatePos)
+		a.setEditorState(blankTemplate, blankTemplatePos, blankTemplatePos)
 	}
 
 	// parse source code to get list of imports and parsing error, if any;
@@ -477,9 +490,7 @@ func (a *Application) WaitForPageLoaded() {
 
 func (a *Application) onPageLoaded() {
 	if a.Hash.ID == "" {
-		a.setEditorText(initialCode)
-		// put the caret at the end of the greeting message
-		a.editor.SetSelection(initialCaretPos, initialCaretPos)
+		a.setEditorState(initialCode, initialCaretPos, initialCaretPos)
 	} else {
 		a.doLoad(a.Hash.ID)
 	}
@@ -499,6 +510,10 @@ func (a *Application) Render() *vecty.HTML {
 		a.Hash = hash.New(a.onHashChange)
 	}
 
+	if a.undoStack == nil {
+		a.undoStack = undo.NewStack(maxUndoStackSize)
+	}
+
 	if a.modifierKey == "" {
 		a.modifierKey = "Ctrl"
 		if util.IsMacOS() {
@@ -515,6 +530,7 @@ func (a *Application) Render() *vecty.HTML {
 		WarningLines:     a.warningLines,
 		ErrorLines:       a.errorLines,
 		Range:            ranges.New(a.Hash.Ranges),
+		UndoStack:        a.undoStack,
 		HighlightingMode: a.HighlightingMode,
 	}
 

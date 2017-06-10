@@ -10,6 +10,7 @@ import (
 	"github.com/gopherjs/vecty"
 	"github.com/gopherjs/vecty/elem"
 	"github.com/gopherjs/vecty/event"
+	"github.com/iafan/goplayspace/client/component/editor/undo"
 	"github.com/iafan/goplayspace/client/js/console"
 	"github.com/iafan/goplayspace/client/js/document"
 	"github.com/iafan/goplayspace/client/js/textarea"
@@ -36,6 +37,7 @@ type Editor struct {
 	HighlightingMode bool
 	ErrorLines       map[string]bool
 	WarningLines     map[string]bool
+	UndoStack        *undo.Stack
 
 	Highlighter     func(s string) string
 	OnTopicChange   func(topic string)
@@ -194,13 +196,40 @@ func (ed *Editor) InsertText(text string) {
 	ed.onChange(nil)
 }
 
+// WrapSelection wraps selection with the provided
+// starting and ending text snippets
+func (ed *Editor) WrapSelection(begin, end string) {
+	if ed.getTextarea() == nil {
+		console.Log("editor.WrapSelection(): getTextarea() is nil!")
+		return
+	}
+	ed.saveState()
+	ed.ta.WrapSelection(begin, end)
+	ed.saveState()
+	ed.onChange(nil)
+}
+
 // SetText replaces the editor text
 func (ed *Editor) SetText(text string) {
 	if ed.getTextarea() == nil {
 		console.Log("editor.SetText() getTextarea() is nil")
 		return
 	}
+	ed.saveState()
 	ed.ta.SetValue(text)
+	ed.saveState()
+	ed.onChange(nil)
+}
+
+// SetState replaces the editor text and sets selection
+func (ed *Editor) SetState(text string, selStart, selEnd int) {
+	if ed.getTextarea() == nil {
+		console.Log("editor.SetState() getTextarea() is nil")
+		return
+	}
+	ed.saveState()
+	ed.ta.SetState(text, selStart, selEnd)
+	ed.saveState()
 	ed.onChange(nil)
 }
 
@@ -311,10 +340,59 @@ func (ed *Editor) handleKeyDown(e *vecty.Event) {
 		e.Call("preventDefault")
 		ed.resetLineSelection()
 		return
+	case 89: // Y
+		if ed.ctrlDown || ed.metaDown { // Ctrl+Y or Command+Y
+			e.Call("preventDefault")
+			ed.Redo()
+			return
+		}
+	case 90: // Z
+		if ed.ctrlDown || ed.metaDown { // Ctrl+Z or Command+Z
+			e.Call("preventDefault")
+			ed.Undo()
+			return
+		}
 	}
 
 	if ed.OnKeyDown != nil {
 		ed.OnKeyDown(e)
+	}
+}
+
+func (ed *Editor) handleKeyPress(e *vecty.Event) {
+	if ed.getTextarea() == nil {
+		return
+	}
+	before, after := ed.ta.GetSymbolsAroundSelectionStart()
+	canWrapQuotes := strings.ContainsAny(before, " \n{([:=") && strings.ContainsAny(after, " \n})]:=")
+	canWrapBraces := strings.ContainsAny(after, " \n})]:=")
+
+	if canWrapQuotes {
+		switch e.Get("charCode").Int() {
+		case 34: // "
+			e.Call("preventDefault")
+			ed.WrapSelection("\"", "\"")
+		case 39: // '
+			e.Call("preventDefault")
+			ed.WrapSelection("'", "'")
+		case 96: // `
+			e.Call("preventDefault")
+			ed.WrapSelection("`", "`")
+		}
+	}
+
+	if canWrapBraces {
+		switch e.Get("charCode").Int() {
+		case 40: // (
+			e.Call("preventDefault")
+			ed.WrapSelection("(", ")")
+		case 91: // [
+			e.Call("preventDefault")
+			ed.WrapSelection("[", "]")
+		case 123: // {
+			e.Call("preventDefault")
+			ed.WrapSelection("{", "}")
+		}
 	}
 }
 
@@ -401,6 +479,7 @@ func (ed *Editor) Render() *vecty.HTML {
 			//vecty.Text(ed.InitialValue), // only sets the value initially!
 
 			event.KeyDown(ed.handleKeyDown),
+			event.KeyPress(ed.handleKeyPress),
 			event.Select(ed.updateSelectionInfo),
 			event.Input(ed.onChange),
 		),

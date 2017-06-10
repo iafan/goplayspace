@@ -41,13 +41,35 @@ func (t *Textarea) GetValue() string {
 	return t.Get("value").String()
 }
 
-// SetValue sets texatrea value (text)
-func (t *Textarea) SetValue(val string) {
+// GetSymbolsAroundSelectionStart returns one symbol before and one symbol
+// after caret; one or both strings can be empty if caret is placed at the beginning
+// or the end of the document, or if the document is blank
+func (t *Textarea) GetSymbolsAroundSelectionStart() (before, after string) {
 	ss := t.GetSelectionStart()
-	se := t.GetSelectionEnd()
+	val := t.GetValue()
+
+	if ss > 0 {
+		before = val[ss-1 : ss]
+	}
+
+	if ss < len(val) {
+		after = val[ss : ss+1]
+	}
+
+	return before, after
+}
+
+// SetState sets texatrea value (text) and selection
+func (t *Textarea) SetState(val string, selStart, selEnd int) {
 	t.Set("value", val)
-	t.SetSelectionStart(ss)
-	t.SetSelectionEnd(se)
+	t.SetSelectionStart(selStart)
+	t.SetSelectionEnd(selEnd)
+}
+
+// SetValue sets texatrea value (text)
+// while preserving selection
+func (t *Textarea) SetValue(val string) {
+	t.SetState(val, t.GetSelectionStart(), t.GetSelectionEnd())
 }
 
 // SetHeight sets texatrea height in pixels
@@ -65,6 +87,22 @@ func (t *Textarea) InsertText(text string) {
 	val = val[:ss] + text + val[se:]
 	t.Set("value", val)
 
-	t.SetSelectionStart(ss + len(text))
-	t.SetSelectionEnd(ss + len(text)) // the same as start
+	ss = ss + len(text)
+	t.SetSelectionStart(ss)
+	t.SetSelectionEnd(ss) // the same as start
+}
+
+// WrapSelection wraps selection with the provided
+// starting and ending text snippets
+// and places the caret before the `end` part
+func (t *Textarea) WrapSelection(begin, end string) {
+	ss := t.GetSelectionStart()
+	se := t.GetSelectionEnd()
+
+	val := t.GetValue()
+	val = val[:ss] + begin + val[ss:se] + end + val[se:]
+	t.Set("value", val)
+
+	t.SetSelectionStart(ss + len(begin))
+	t.SetSelectionEnd(se + len(begin))
 }
