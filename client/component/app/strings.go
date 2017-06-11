@@ -18,8 +18,8 @@ var helpHTML = `
 	<p>Main differences from the official Go Playground:</p>
 
 	<ol>
-		<li>Syntax highlighting</li>
-		<li>Golang help lookup: double-click on e.g. <code>package</code> keyword or <code>Println</code> function name in source code,
+		<li>Syntax highlighting, auto-closing braces and quotes, proper undo/redo, auto indnentation</li>
+		<li>Smart help lookup: double-click on e.g. <code>package</code> keyword or <code>Println</code> function name in source code,
 		and you will see the relevant help topic. Try it!</li>
 		<li>Live syntax error checking</li>
 		<li>Error line highlighting (both for syntax errors and for errors returned from the compiler)</li>
