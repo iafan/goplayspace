@@ -310,6 +310,12 @@ func (ed *Editor) getIndent() string {
 			break
 		}
 	}
+	before, _ := ed.ta.GetSymbolsAroundSelectionStart()
+	if strings.ContainsAny(before, "{([") {
+		i++
+	} else if before == "}" && i > 0 {
+		i--
+	}
 
 	return strings.Repeat("\t", i)
 }
