@@ -2,6 +2,7 @@ package app
 
 import "time"
 
+// PageTitle is set as a <title> once the app is loaded
 var PageTitle = "The Go Play Space"
 
 var helpHTML = `
@@ -38,20 +39,6 @@ var helpHTML = `
 		Please include the URL and the reason for the request.
 	</p>
 `
-
-/*
-var initialCode = `package main
-
-import "fmt"
-import "runtime"
-
-func main() {
-	fmt.Println(strconv.Itoa("5"))
-	fmt.Println(runtime.Version("5"))
-	fmt.Println("Lorem\nIpsum\nis\nsimply\ndummy\ntext\nof\nthe\nprinting\nand\ntypesetting\nindustry.")
-}
-`
-*/
 
 var blankTemplatePos = 29
 
