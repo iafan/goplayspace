@@ -12,7 +12,7 @@ a React-like frontend library for GopherJS).
 
 Main differences from the official Go Playground:
 
-1. Syntax highlighting, auto-closing braces and quotes, proper undo/redo, auto indnentation
+1. Syntax highlighting, auto-closing braces and quotes, proper undo/redo, auto indentation
 2. Smart help lookup: double-click on e.g. <code>package</code> keyword
    or <code>Println</code> function name in source code, and you will see
    the relevant help topic.

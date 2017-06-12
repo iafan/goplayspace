@@ -19,7 +19,7 @@ var helpHTML = `
 	<p>Main differences from the official Go Playground:</p>
 
 	<ol>
-		<li>Syntax highlighting, auto-closing braces and quotes, proper undo/redo, auto indnentation</li>
+		<li>Syntax highlighting, auto-closing braces and quotes, proper undo/redo, auto indentation</li>
 		<li>Smart help lookup: double-click on e.g. <code>package</code> keyword or <code>Println</code> function name in source code,
 		and you will see the relevant help topic. Try it!</li>
 		<li>Live syntax error checking</li>
@@ -42,7 +42,7 @@ var helpHTML = `
 
 var blankTemplatePos = 29
 
-// template has tabulation symbol on purpose!
+// template has the tabulation symbol on purpose!
 var blankTemplate = `package main
 
 func main() {
