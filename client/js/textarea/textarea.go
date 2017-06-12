@@ -41,19 +41,21 @@ func (t *Textarea) GetValue() string {
 	return t.Get("value").String()
 }
 
-// GetSymbolsAroundSelectionStart returns one symbol before and one symbol
-// after caret; one or both strings can be empty if caret is placed at the beginning
+// GetSymbolsAroundSelection returns one symbol before and one symbol
+// after selection (or around the caret, if there's no selection);
+// one or both strings can be empty if caret is placed at the beginning
 // or the end of the document, or if the document is blank
-func (t *Textarea) GetSymbolsAroundSelectionStart() (before, after string) {
+func (t *Textarea) GetSymbolsAroundSelection() (before, after string) {
 	ss := t.GetSelectionStart()
+	se := t.GetSelectionEnd()
 	val := t.GetValue()
 
 	if ss > 0 {
 		before = val[ss-1 : ss]
 	}
 
-	if ss < len(val) {
-		after = val[ss : ss+1]
+	if se < len(val) {
+		after = val[se : se+1]
 	}
 
 	return before, after

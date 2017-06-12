@@ -295,9 +295,9 @@ func (ed *Editor) toggleLineSelection() {
 	ed.toggleLine(line)
 }
 
-func (ed *Editor) getIndent() string {
+func (ed *Editor) getIndent() int {
 	if ed.getTextarea() == nil {
-		return ""
+		return 0
 	}
 	ss := ed.ta.GetSelectionStart()
 	s := ed.ta.GetValue()[:ss]
@@ -310,14 +310,14 @@ func (ed *Editor) getIndent() string {
 			break
 		}
 	}
-	before, _ := ed.ta.GetSymbolsAroundSelectionStart()
+	before, _ := ed.ta.GetSymbolsAroundSelection()
 	if strings.ContainsAny(before, "{([") {
 		i++
 	} else if before == "}" && i > 0 {
 		i--
 	}
 
-	return strings.Repeat("\t", i)
+	return i
 }
 
 func (ed *Editor) handleKeyDown(e *vecty.Event) {
@@ -339,7 +339,21 @@ func (ed *Editor) handleKeyDown(e *vecty.Event) {
 	case 13: // Enter
 		if !ed.shiftDown && !ed.ctrlDown && !ed.metaDown {
 			e.Call("preventDefault")
-			ed.InsertText("\n" + ed.getIndent())
+			i := ed.getIndent()
+			before, after := ed.ta.GetSymbolsAroundSelection()
+			if before == "{" && after == "}" ||
+				before == "(" && after == ")" ||
+				before == "[" && after == "]" {
+				iAfter := i - 1
+				if iAfter < 0 {
+					iAfter = 0
+				}
+				ed.WrapSelection(
+					"\n"+strings.Repeat("\t", i),
+					"\n"+strings.Repeat("\t", iAfter))
+			} else {
+				ed.InsertText("\n" + strings.Repeat("\t", i))
+			}
 			return
 		}
 	case 27: // Esc
@@ -369,7 +383,7 @@ func (ed *Editor) handleKeyPress(e *vecty.Event) {
 	if ed.getTextarea() == nil {
 		return
 	}
-	before, after := ed.ta.GetSymbolsAroundSelectionStart()
+	before, after := ed.ta.GetSymbolsAroundSelection()
 	canWrapQuotes := strings.ContainsAny(before, " \n{([:=") && strings.ContainsAny(after, " \n})]:=")
 	canWrapBraces := strings.ContainsAny(after, " \n})]:=")
 
