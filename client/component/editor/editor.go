@@ -490,7 +490,10 @@ func (ed *Editor) Render() *vecty.HTML {
 	return elem.Div(
 		vecty.ClassMap{"scroller": true},
 		elem.TextArea(
-			vecty.ClassMap{"editor": true},
+			vecty.ClassMap{
+				"editor":       true,
+				"highlighting": ed.HighlightingMode,
+			},
 			vecty.Property("autocapitalize", "off"),
 			vecty.Attribute("autocomplete", "off"),
 			vecty.Attribute("autocorrect", "off"),

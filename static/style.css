@@ -216,11 +216,14 @@ code, kbd {
 	background: none;
 	outline: none;
 	resize: none;
+}
+
+.editor.highlighted {
 	color: rgba(0,0,0,0);
 	caret-color: #000;
 }
 
-.safari .editor {
+.safari .editor.highlighted {
 	color: #000;
 	-webkit-text-fill-color: rgba(0,0,0,0);
 }
@@ -237,6 +240,7 @@ code, kbd {
 
 .shadow {
 	pointer-events: none;
+	color: rgba(0,0,0,0);
 }
 
 .shadow ol {
@@ -417,7 +421,7 @@ body.dark {
 	--highlight-com-color: #777;
 }
 
-.dark .editor {
+.dark .editor.highlighted {
 	caret-color: #fff;
 }
 
