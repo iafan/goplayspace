@@ -28,6 +28,7 @@ type Splitter struct {
 	MinSizePercent   float64
 	Type             int
 	InvertSizeDelta  bool
+	OnChange         func()
 
 	isMoving      bool
 	node          *js.Object
@@ -40,6 +41,12 @@ type Splitter struct {
 	screenCoord   string
 	pos           float64
 	prevPos       float64
+}
+
+func (s *Splitter) fireOnChangeEvent() {
+	if s.OnChange != nil {
+		s.OnChange()
+	}
 }
 
 func (s *Splitter) onMouseDown(e *vecty.Event) {
@@ -91,6 +98,8 @@ func (s *Splitter) updatePos() {
 	if s.oppositePane != nil {
 		s.oppositePane.Call("setAttribute", "style", s.styleParam+":"+strconv.FormatFloat(100-s.pos, 'f', 4, 32)+"%")
 	}
+
+	s.fireOnChangeEvent()
 
 	js.Global.Call("requestAnimationFrame", s.updatePos)
 }

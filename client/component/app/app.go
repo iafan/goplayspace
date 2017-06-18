@@ -26,6 +26,7 @@ import (
 	"github.com/iafan/goplayspace/client/hash"
 	"github.com/iafan/goplayspace/client/js/console"
 	"github.com/iafan/goplayspace/client/js/localstorage"
+	"github.com/iafan/goplayspace/client/js/window"
 	"github.com/iafan/goplayspace/client/ranges"
 	"github.com/iafan/goplayspace/client/util"
 	"github.com/iafan/syntaxhighlight"
@@ -494,6 +495,12 @@ func (a *Application) onPageLoaded() {
 	} else {
 		a.doLoad(a.Hash.ID)
 	}
+
+	window.AddEventListener("resize", a.onResize)
+}
+
+func (a *Application) onResize() {
+	a.editor.ResizeTextarea()
 }
 
 func (a *Application) settingsButtonClick(e *vecty.Event) {
@@ -605,6 +612,7 @@ func (a *Application) Render() *vecty.HTML {
 						OppositeSelector: ".scroller",
 						Type:             splitter.RightPane,
 						MinSizePercent:   2,
+						OnChange:         a.onResize,
 					},
 				),
 			),

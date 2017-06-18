@@ -129,12 +129,13 @@ func (ed *Editor) updateSelectionInfo(e *vecty.Event) {
 	ed.OnTopicChange(sel)
 }
 
-func (ed *Editor) resizeTextarea() {
+// ResizeTextarea resizes the height of the textarea
+// to match the computed height of the shadow
+func (ed *Editor) ResizeTextarea() {
 	if ed.getShadow() == nil || ed.getTextarea() == nil {
 		return
 	}
 
-	ed.sh.SetValue(ed.highlighted)
 	ed.ta.SetHeight(ed.sh.GetHeight())
 }
 
@@ -149,8 +150,8 @@ func (ed *Editor) makeHighlightedText(text string) string {
 
 // Highlight applies highlighting to the editor
 func (ed *Editor) Highlight(on bool) {
-	if ed.getTextarea() == nil {
-		console.Log("editor.Highlight(): getTextarea() is nil!")
+	if ed.getShadow() == nil || ed.getTextarea() == nil {
+		console.Log("editor.Highlight(): getShadow() or getTextarea() is nil!")
 		return
 	}
 	text := ed.ta.GetValue()
@@ -161,7 +162,8 @@ func (ed *Editor) Highlight(on bool) {
 	if ed.highlighted == "" {
 		ed.highlighted = ed.makeHighlightedText(text)
 	}
-	ed.resizeTextarea()
+	ed.sh.SetValue(ed.highlighted)
+	ed.ResizeTextarea()
 }
 
 func (ed *Editor) onChange(e *vecty.Event) {
