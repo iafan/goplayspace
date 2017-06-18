@@ -369,9 +369,13 @@ func (ed *Editor) handleKeyDown(e *vecty.Event) {
 			return
 		}
 	case 90: // Z
-		if ed.ctrlDown || ed.metaDown { // Ctrl+Z or Command+Z
+		if ed.ctrlDown || ed.metaDown {
 			e.Call("preventDefault")
-			ed.Undo()
+			if ed.shiftDown {
+				ed.Redo() // Shift+Ctrl+Z or Shift+Command+Z
+			} else {
+				ed.Undo() // Ctrl+Z or Command+Z
+			}
 			return
 		}
 	}
