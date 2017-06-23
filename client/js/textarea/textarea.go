@@ -3,7 +3,10 @@ package textarea
 import (
 	"strconv"
 
+	"unicode/utf16"
+
 	"github.com/gopherjs/gopherjs/js"
+	"github.com/iafan/goplayspace/client/js/str"
 )
 
 // Textarea provides wrapper functions for <textarea> object
@@ -16,27 +19,61 @@ func (t *Textarea) Focus() {
 	t.Call("focus")
 }
 
-// GetSelectionStart returns selection start character
+// GetSymbolWidthsAround returns the size of the unicode symbols
+// in utf8 bytes before and after a given utf8 byte range in a string
+func (t *Textarea) GetSymbolWidthsAround(before, after int) (wBefore, wAfter int) {
+	u16 := utf16.Encode([]rune(t.GetValue()))
+
+	if before <= len(u16) {
+		if r := utf16.Decode(u16[:before]); len(r) > 0 {
+			wBefore = len(string(r[len(r)-1]))
+		}
+	}
+
+	if after < len(u16) {
+		if r := utf16.Decode(u16[after:]); len(r) > 0 {
+			wAfter = len(string(r[0]))
+		}
+	}
+
+	return
+}
+
+func (t *Textarea) utf16ToUTF8Pos(i int) int {
+	return str.UTF16ToUTF8Pos(t.GetValue(), i)
+}
+
+func (t *Textarea) utf8ToUTF16Pos(i int) int {
+	return str.UTF8ToUTF16Pos(t.GetValue(), i)
+}
+
+// GetSelectionStart returns selection start utf8 byte position
+// Note that JavaScript strings are UTF-16-encoded,
+// and selectionStart returns a position in the UTF-16 array
+// representing the textarea value
 func (t *Textarea) GetSelectionStart() int {
-	return t.Get("selectionStart").Int()
+	return t.utf16ToUTF8Pos(t.Get("selectionStart").Int())
 }
 
 // SetSelectionStart sets selection start character
 func (t *Textarea) SetSelectionStart(val int) {
-	t.Set("selectionStart", val)
+	t.Set("selectionStart", t.utf8ToUTF16Pos(val))
 }
 
-// GetSelectionEnd returns selection end character
+// GetSelectionEnd returns selection end utf8 byte position
+// Note that JavaScript strings are UTF-16-encoded,
+// and selectionStart returns a position in the UTF-16 array
+// representing the textarea value
 func (t *Textarea) GetSelectionEnd() int {
-	return t.Get("selectionEnd").Int()
+	return t.utf16ToUTF8Pos(t.Get("selectionEnd").Int())
 }
 
 // SetSelectionEnd sets selection end character
 func (t *Textarea) SetSelectionEnd(val int) {
-	t.Set("selectionEnd", val)
+	t.Set("selectionEnd", t.utf8ToUTF16Pos(val))
 }
 
-// GetValue returns current texatrea value (text)
+// GetValue returns current textarea value (text)
 func (t *Textarea) GetValue() string {
 	return t.Get("value").String()
 }
@@ -50,12 +87,14 @@ func (t *Textarea) GetSymbolsAroundSelection() (before, after string) {
 	se := t.GetSelectionEnd()
 	val := t.GetValue()
 
+	wb, wa := t.GetSymbolWidthsAround(ss, se)
+
 	if ss > 0 {
-		before = val[ss-1 : ss]
+		before = val[ss-wb : ss]
 	}
 
 	if se < len(val) {
-		after = val[se : se+1]
+		after = val[se : se+wa]
 	}
 
 	return before, after
