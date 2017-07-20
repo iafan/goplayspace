@@ -430,8 +430,9 @@ func (ed *Editor) handleKeyPress(e *vecty.Event) {
 		return
 	}
 	before, after := ed.ta.GetSymbolsAroundSelection()
-	canWrapQuotes := strings.ContainsAny(before, " \n{([:=") && strings.ContainsAny(after, " \n})]:=")
-	canWrapBraces := strings.ContainsAny(after, " \n})]:=")
+	canWrapQuotes := (before == "" || strings.ContainsAny(before, " \n{([:=")) &&
+		(after == "" || strings.ContainsAny(after, " \n})]:="))
+	canWrapBraces := after == "" || strings.ContainsAny(after, " \n})]:=")
 
 	r := rune(e.Get("charCode").Int())
 	rs := string(r)
