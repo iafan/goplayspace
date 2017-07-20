@@ -80,6 +80,14 @@ func (ed *Editor) Focus() {
 	util.Schedule(ed.ta.Focus)
 }
 
+// GetSelection gets text selection
+func (ed *Editor) GetSelection() (start, end int) {
+	if ed.getTextarea() == nil {
+		return -1, -1
+	}
+	return ed.ta.GetSelectionStart(), ed.ta.GetSelectionEnd()
+}
+
 // SetSelection sets text selection
 func (ed *Editor) SetSelection(start, end int) {
 	if ed.getTextarea() == nil {
@@ -327,6 +335,10 @@ func (ed *Editor) handleKeyDown(e *vecty.Event) {
 	ed.ctrlDown = e.Get("ctrlKey").Bool()
 	ed.metaDown = e.Get("metaKey").Bool()
 
+	if ed.getTextarea() == nil {
+		return
+	}
+
 	switch e.Get("keyCode").Int() {
 	case 84: // T
 		if ed.ctrlDown { // Ctrl+T
@@ -334,6 +346,34 @@ func (ed *Editor) handleKeyDown(e *vecty.Event) {
 			ed.toggleLineSelection()
 			return
 		}
+	case 8: // Backspace
+		before, after := ed.ta.GetSymbolsAroundSelection()
+
+		insidePair := false
+		switch before {
+		case `"`, "'", "`":
+			insidePair = before == after
+		case "(":
+			insidePair = after == ")"
+		case "[":
+			insidePair = after == "]"
+		case "{":
+			insidePair = after == "}"
+		}
+
+		if !insidePair {
+			break
+		}
+
+		ss, se := ed.GetSelection()
+		if ss != se || ss == -1 {
+			break
+		}
+
+		e.Call("preventDefault")
+		ed.SetSelection(ss-1, ss+1)
+		ed.InsertText("")
+		return
 	case 9: // Tab
 		e.Call("preventDefault")
 		ed.InsertText("\t")
@@ -393,32 +433,44 @@ func (ed *Editor) handleKeyPress(e *vecty.Event) {
 	canWrapQuotes := strings.ContainsAny(before, " \n{([:=") && strings.ContainsAny(after, " \n})]:=")
 	canWrapBraces := strings.ContainsAny(after, " \n})]:=")
 
+	r := rune(e.Get("charCode").Int())
+	rs := string(r)
+
 	if canWrapQuotes {
-		switch e.Get("charCode").Int() {
-		case 34: // "
+		switch r {
+		case '"', '\'', '`':
 			e.Call("preventDefault")
-			ed.WrapSelection("\"", "\"")
-		case 39: // '
-			e.Call("preventDefault")
-			ed.WrapSelection("'", "'")
-		case 96: // `
-			e.Call("preventDefault")
-			ed.WrapSelection("`", "`")
+			ed.WrapSelection(rs, rs)
 		}
 	}
 
 	if canWrapBraces {
-		switch e.Get("charCode").Int() {
-		case 40: // (
+		switch r {
+		case '(':
 			e.Call("preventDefault")
 			ed.WrapSelection("(", ")")
-		case 91: // [
+		case '[':
 			e.Call("preventDefault")
 			ed.WrapSelection("[", "]")
-		case 123: // {
+		case '{':
 			e.Call("preventDefault")
 			ed.WrapSelection("{", "}")
 		}
+	}
+
+	switch r {
+	case ')', ']', '}', '"', '\'', '`':
+		if after != rs {
+			break
+		}
+
+		ss, se := ed.GetSelection()
+		if ss != se || ss == -1 {
+			break
+		}
+
+		e.Call("preventDefault")
+		ed.SetSelection(ss+1, ss+1)
 	}
 }
 
