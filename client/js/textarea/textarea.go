@@ -100,20 +100,20 @@ func (t *Textarea) GetSymbolsAroundSelection() (before, after string) {
 	return before, after
 }
 
-// SetState sets texatrea value (text) and selection
+// SetState sets textarea value (text) and selection
 func (t *Textarea) SetState(val string, selStart, selEnd int) {
 	t.Set("value", val)
 	t.SetSelectionStart(selStart)
 	t.SetSelectionEnd(selEnd)
 }
 
-// SetValue sets texatrea value (text)
+// SetValue sets textarea value (text)
 // while preserving selection
 func (t *Textarea) SetValue(val string) {
 	t.SetState(val, t.GetSelectionStart(), t.GetSelectionEnd())
 }
 
-// SetHeight sets texatrea height in pixels
+// SetHeight sets textarea height in pixels
 func (t *Textarea) SetHeight(val int) {
 	t.Call("setAttribute", "style", "height:"+strconv.Itoa(val)+"px")
 }
