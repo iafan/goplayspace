@@ -8,10 +8,11 @@ import (
 // calls, e.g. selectionStart / selectionEnd) to a UTF-8 position
 // in the string
 func UTF16ToUTF8Pos(s string, i int) int {
-	if i > len(s) {
-		i = len(s)
+	su := utf16.Encode([]rune(s))
+	if i > len(su) {
+		i = len(su)
 	}
-	return len(string(utf16.Decode(utf16.Encode([]rune(s))[:i])))
+	return len(string(utf16.Decode(su[:i])))
 }
 
 // UTF8ToUTF16Pos converts UTF-8 position in the string
