@@ -150,7 +150,7 @@ func (b *DrawBoard) addSpeechBubble(x, y float64, s string) {
 			"left: %.0fpx; top: %.0fpx",
 			cX+x-elw/2, cY+y-elh/2,
 		)
-		el.Set("style", style)
+		el.Call("setAttribute", "style", style)
 
 		// start animation
 		el.Set("className", "say-bubble animate")
@@ -201,7 +201,7 @@ func (b *DrawBoard) doSubStep(pos float64) {
 		bgPos,
 	)
 
-	b.gopher.Set("style", style)
+	b.gopher.Call("setAttribute", "style", style)
 }
 
 func (b *DrawBoard) doStep() {
@@ -344,7 +344,7 @@ func (b *DrawBoard) onResize() {
 	b.stepSize = min / (stepsInEachDirection*2 + 1) // "+1" to add 0.5 steps around
 	b.canvas.SetSize(b.w, b.h)
 	b.renderBoardLines()
-	b.gopher.Set("style", "")
+	b.gopher.Call("setAttribute", "style", "")
 }
 
 // SkipRender implements the vecty.Component interface.
