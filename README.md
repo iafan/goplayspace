@@ -6,11 +6,17 @@ frontend that is built in Go itself (using [GopherJS](https://github.com/gopherj
 a Go&rarr;JavaScript transpiler, and [Vecty](https://github.com/gopherjs/vecty),
 a React-like frontend library for GopherJS).
 
+Try it: [https://goplay.space](https://goplay.space/)
+=====
+
 ![demo](https://cloud.githubusercontent.com/assets/1728158/26770686/b3f0a4d0-496d-11e7-8be2-9ab88e856b8c.gif)
 
-### Try it yourself: [https://goplay.space &rarr;](https://goplay.space/)
+Go Play Space supports the [Turtle graphics mode](https://goplay.space/#draw) to help visualize algorithms and make learning experience more fun.
 
-Main differences from the official Go Playground:
+![draw mode demo](https://user-images.githubusercontent.com/1728158/29108287-12dfd26a-7c93-11e7-966d-713356bce3d3.gif)
+
+Features
+--------
 
 1. Syntax highlighting, auto-closing braces and quotes, proper undo/redo, auto indentation
 2. Smart help lookup: double-click on e.g. <code>package</code> keyword
@@ -59,6 +65,11 @@ Troubleshooting
 ---------------
 
 If you have trouble compiling the client, please make sure you have the latest version of GopherJS installed by running `go get -u github.com/gopherjs/gopherjs` (see #6)
+
+Feedback
+--------
+
+Feel free to provide your feedback, suggestions or bug reports here in the <a href="https://github.com/iafan/goplayspace/issues">bug tracker</a>, or message [@afan](https://gophers.slack.com/messages/@afan/) in the [Gophers Slack channel](https://gophersinvite.herokuapp.com/).
 
 Credits
 -------

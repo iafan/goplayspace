@@ -15,24 +15,28 @@ import (
 	"github.com/gopherjs/vecty"
 	"github.com/gopherjs/vecty/elem"
 	"github.com/gopherjs/vecty/event"
+	"github.com/iafan/syntaxhighlight"
 
 	"github.com/iafan/goplayspace/client/api"
+	"github.com/iafan/goplayspace/client/component/drawboard"
 	"github.com/iafan/goplayspace/client/component/editor"
 	"github.com/iafan/goplayspace/client/component/editor/undo"
 	"github.com/iafan/goplayspace/client/component/help"
 	"github.com/iafan/goplayspace/client/component/log"
 	"github.com/iafan/goplayspace/client/component/settings"
 	"github.com/iafan/goplayspace/client/component/splitter"
+	"github.com/iafan/goplayspace/client/draw"
 	"github.com/iafan/goplayspace/client/hash"
 	"github.com/iafan/goplayspace/client/js/console"
 	"github.com/iafan/goplayspace/client/js/localstorage"
 	"github.com/iafan/goplayspace/client/js/window"
 	"github.com/iafan/goplayspace/client/ranges"
 	"github.com/iafan/goplayspace/client/util"
-	"github.com/iafan/syntaxhighlight"
 )
 
 const maxUndoStackSize uint = 50
+
+const idDrawPage = "draw"
 
 // Application implements the main application view
 type Application struct {
@@ -59,14 +63,19 @@ type Application struct {
 	isLoading            bool
 	isCompiling          bool
 	isSharing            bool
+	isDrawingMode        bool
 	hasCompilationErrors bool
 	needRender           bool
 	showSettings         bool
+	showDrawHelp         bool
 
 	// Log properties
 	hasRun bool
 	err    string
 	events []*api.CompileEvent
+
+	// Draw mode properties
+	actions draw.ActionList
 
 	// Editor properties
 	warningLines map[string]bool
@@ -172,6 +181,16 @@ func (a *Application) doRunAsync() {
 			a.errorLines[m[1]] = true
 		}
 	}
+
+	// parse gopher commands
+	if !a.hasCompilationErrors {
+		output := make([]string, len(a.events))
+		for i := range a.events {
+			output[i] = a.events[i].Message
+		}
+		a.actions = draw.ParseString(strings.Join(output, "\n"))
+		a.isDrawingMode = len(a.actions) > 0
+	}
 }
 
 func (a *Application) doRunAsyncComplete() {
@@ -208,14 +227,25 @@ func (a *Application) doShareAsyncComplete() {
 	a.wantRerender("doShareAsyncComplete")
 }
 
-func (a *Application) onHashChange(h *hash.Hash) {
-	if h.ID != "" {
-		a.doLoad(h.ID)
+func (a *Application) updateStateFromHash(h *hash.Hash) (canLoad bool) {
+	if h.ID == idDrawPage {
+		a.showDrawHelp = true
+		return false
 	}
-	if a.isLoading {
+
+	return true
+}
+
+func (a *Application) onHashChange(h *hash.Hash) {
+	defer a.wantRerender("onHashChange")
+
+	if a.isLoading || h.ID == "" {
 		return
 	}
-	a.wantRerender("onHashChange")
+
+	if a.updateStateFromHash(h) {
+		a.doLoad(h.ID)
+	}
 }
 
 func (a *Application) doLoad(id string) {
@@ -490,12 +520,15 @@ func (a *Application) WaitForPageLoaded() {
 }
 
 func (a *Application) onPageLoaded() {
-	if a.Hash.ID == "" {
+	switch a.Hash.ID {
+	case "":
 		a.setEditorState(initialCode, initialCaretPos, initialCaretPos)
-	} else {
-		a.doLoad(a.Hash.ID)
+	case idDrawPage:
+		a.setEditorState(initialDrawCode, initialDrawCaretPos, initialDrawCaretPos)
+		fallthrough
+	default:
+		a.onHashChange(a.Hash)
 	}
-
 	window.AddEventListener("resize", a.onResize)
 }
 
@@ -508,6 +541,19 @@ func (a *Application) settingsButtonClick(e *vecty.Event) {
 	a.wantRerender("settingsButtonClick")
 }
 
+func (a *Application) handleKeyDown(e *vecty.Event) {
+	switch e.Get("key").String() {
+	case "Escape":
+		if a.isDrawingMode {
+			a.isDrawingMode = false
+			a.wantRerender("isDrawingMode switched off")
+			util.Schedule(a.editor.Focus)
+		}
+	default:
+		//console.Log(e.Get("key").String())
+	}
+}
+
 // Render renders the application
 func (a *Application) Render() *vecty.HTML {
 	//console.Time("app:render")
@@ -515,6 +561,7 @@ func (a *Application) Render() *vecty.HTML {
 
 	if a.Hash == nil {
 		a.Hash = hash.New(a.onHashChange)
+		a.updateStateFromHash(a.Hash)
 	}
 
 	if a.undoStack == nil {
@@ -539,6 +586,7 @@ func (a *Application) Render() *vecty.HTML {
 		Range:            ranges.New(a.Hash.Ranges),
 		UndoStack:        a.undoStack,
 		HighlightingMode: a.HighlightingMode,
+		ReadonlyMode:     a.isDrawingMode,
 	}
 
 	a.log = &log.Log{
@@ -553,6 +601,7 @@ func (a *Application) Render() *vecty.HTML {
 		vecty.ClassMap{
 			"safari":           util.IsSafari(),
 			"ios":              util.IsIOS(),
+			"drawingmode":      a.isDrawingMode,
 			a.Theme:            true,
 			tabWidthClass:      true,
 			a.getGlobalState(): true,
@@ -599,9 +648,13 @@ func (a *Application) Render() *vecty.HTML {
 				a.editor,
 				elem.Div(
 					vecty.ClassMap{"help-wrapper": true},
-					vecty.If(a.Topic == "", elem.Div(
+					vecty.If(a.Topic == "" && !a.showDrawHelp, elem.Div(
 						vecty.ClassMap{"help": true},
 						vecty.UnsafeHTML(helpHTML),
+					)),
+					vecty.If(a.Topic == "" && a.showDrawHelp, elem.Div(
+						vecty.ClassMap{"help": true},
+						vecty.UnsafeHTML(drawHelpHTML),
 					)),
 					vecty.If(a.Topic != "", &help.Browser{
 						Imports: a.Imports,
@@ -635,8 +688,12 @@ func (a *Application) Render() *vecty.HTML {
 			HighlightingMode: a.HighlightingMode,
 			OnChange:         a.onSettingsChange,
 		}),
+		vecty.If(a.isDrawingMode, &drawboard.DrawBoard{
+			Actions: a.actions,
+		}),
 		elem.Style(
 			vecty.UnsafeHTML(a.getOverrideCSS()),
 		),
+		event.KeyDown(a.handleKeyDown),
 	)
 }

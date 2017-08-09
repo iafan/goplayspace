@@ -2,6 +2,16 @@ package document
 
 import "github.com/gopherjs/gopherjs/js"
 
+// Body is a wrapper for document.body
+func Body() *js.Object {
+	return js.Global.Get("document").Get("body")
+}
+
+// CreateElement is a wrapper for document.createElement
+func CreateElement(name string) *js.Object {
+	return js.Global.Get("document").Call("createElement", name)
+}
+
 // QuerySelector is a wrapper for document.querySelector
 func QuerySelector(sel string) *js.Object {
 	return js.Global.Get("document").Call("querySelector", sel)

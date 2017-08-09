@@ -11,3 +11,8 @@ func AddEventListener(params ...interface{}) {
 func RemoveEventListener(params ...interface{}) {
 	js.Global.Get("window").Call("removeEventListener", params...)
 }
+
+// RequestAnimationFrame is a wrapper for window.requestAnimationFrame
+func RequestAnimationFrame(callback interface{}) {
+	js.Global.Get("window").Call("requestAnimationFrame", callback)
+}

@@ -10,6 +10,7 @@ import (
 	"github.com/gopherjs/vecty"
 	"github.com/gopherjs/vecty/elem"
 	"github.com/gopherjs/vecty/event"
+
 	"github.com/iafan/goplayspace/client/component/editor/undo"
 	"github.com/iafan/goplayspace/client/js/console"
 	"github.com/iafan/goplayspace/client/js/document"
@@ -35,6 +36,7 @@ type Editor struct {
 	InitialValue     string
 	Range            *ranges.Range
 	HighlightingMode bool
+	ReadonlyMode     bool
 	ErrorLines       map[string]bool
 	WarningLines     map[string]bool
 	UndoStack        *undo.Stack
@@ -558,6 +560,7 @@ func (ed *Editor) Render() *vecty.HTML {
 			vecty.Attribute("autocorrect", "off"),
 			vecty.Property("autofocus", true),
 			vecty.Property("spellcheck", false),
+			vecty.Property("readonly", ed.ReadonlyMode),
 			//vecty.Text(ed.InitialValue), // only sets the value initially!
 
 			event.KeyDown(ed.handleKeyDown),
