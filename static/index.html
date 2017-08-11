@@ -1,42 +1,110 @@
 <html>
-	<head>
-		<title>Loading...</title>
-		<meta charset="utf-8">
-		<meta name="viewport" content="width=device-width, initial-scale=1.0">
-		<meta name="format-detection" content="telephone=no">
-		<link rel="icon" href="/favicon.ico?v2" type="image/x-icon" />
-		<link rel="stylesheet" type="text/css" href="/style.css">
-		<style>
-			body {
-				margin: 0;
-				padding: 0;
-				overflow: hidden;
-			}
 
-			.preload {
-				position: absolute;
-				top: 0;
-				left: 0;
-				width: 100%;
-				height: 100%;
-				background: #ddd;
-				display: flex;
-				align-items: center;
-				justify-content: center;
-			}
+<head>
+	<meta charset="utf-8">
+	<title>The Go Play Space</title>
+	<meta name="description" content="Alternative Go (Golang) Playground with syntax highlighting, turtle graphics and more">
+	<meta name="keywords" content="go,golang,playground,online,editor,turtle graphics,logo">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="format-detection" content="telephone=no">
+	<link rel="icon" href="/favicon.ico?v2" type="image/x-icon" />
+	<link rel="stylesheet" type="text/css" href="/style.css">
+	<style>
+		body {
+			margin: 0;
+			padding: 0;
+			overflow: hidden;
+		}
 
-			.preload svg {
-			    -webkit-animation:spin 4s linear infinite;
-			    -moz-animation:spin 2s linear infinite;
-			    animation:spin 2s linear infinite;
+		.preload {
+			position: absolute;
+			top: 0;
+			left: 0;
+			width: 100%;
+			height: 100%;
+			background: #ddd;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+		}
+
+		.preload svg {
+			-webkit-animation: spin 4s linear infinite;
+			-moz-animation: spin 2s linear infinite;
+			animation: spin 2s linear infinite;
+		}
+
+		@-moz-keyframes spin {
+			100% {
+				-moz-transform: rotate(360deg);
 			}
-			@-moz-keyframes spin { 100% { -moz-transform: rotate(360deg); } }
-			@-webkit-keyframes spin { 100% { -webkit-transform: rotate(360deg); } }
-			@keyframes spin { 100% { -webkit-transform: rotate(360deg); transform:rotate(360deg); } }
-		</style>
-	</head>
-	<body>
-		<div class="preload"><svg xmlns="http://www.w3.org/2000/svg" width="44.664" height="62.164" viewBox="0 0 401.98 559.472"><path fill-rule="evenodd" clip-rule="evenodd" fill="#F6D2A2" stroke="#000" stroke-width="3" stroke-linecap="round" d="M10.634 300.493c.764 15.75 16.5 8.463 23.626 3.54 6.765-4.676 8.743-.79 9.337-10.016.39-6.064 1.088-12.128.744-18.216-10.23-.92-21.35 1.51-29.74 7.61-4.32 3.14-12.42 13.16-3.96 17.09"/><path fill-rule="evenodd" clip-rule="evenodd" fill="#C6B198" stroke="#000" stroke-width="3" stroke-linecap="round" d="M10.634 300.493c2.29-.852 4.717-1.457 6.27-3.528"/><path fill-rule="evenodd" clip-rule="evenodd" fill="#6AD7E5" stroke="#000" stroke-width="3" stroke-linecap="round" d="M46.997 112.853C-13.3 95.897 31.537 19.19 79.957 50.74l-32.96 62.113zm267.898-67.87c47.727-33.522 90.856 42.11 35.388 61.14l-35.388-61.14z"/><path fill-rule="evenodd" clip-rule="evenodd" fill="#F6D2A2" stroke="#000" stroke-width="3" stroke-linecap="round" d="M325.16 494.343c12.124 7.5 34.283 30.182 16.097 41.18-17.474 16-27.254-17.56-42.59-22.21 6.604-8.97 14.976-17.15 26.494-18.97z"/><path clip-rule="evenodd" fill="none" stroke="#000" stroke-width="3" stroke-linecap="round" d="M341.257 535.522c-2.696-5.36-3.6-11.618-8.102-15.94"/><path fill-rule="evenodd" clip-rule="evenodd" fill="#F6D2A2" stroke="#000" stroke-width="3" stroke-linecap="round" d="M108.58 519.975c-14.23 2.202-22.24 15.04-34.1 21.558-11.18 6.665-15.455-2.134-16.462-3.92-1.752-.8-1.605.744-4.31-1.98-10.36-16.353 10.798-28.307 21.816-36.43 15.346-3.103 24.963 10.2 33.055 20.772z"/><path clip-rule="evenodd" fill="none" stroke="#000" stroke-width="3" stroke-linecap="round" d="M58.02 537.612c.54-6.233 5.483-10.407 7.837-15.677"/><path fill-rule="evenodd" clip-rule="evenodd" d="M49.513 91.667c-7.955-4.208-13.79-9.923-8.925-19.124 4.505-8.518 12.874-7.593 20.83-3.385l-11.905 22.51zm288.203-8c7.955-4.208 13.79-9.923 8.925-19.124-4.5-8.518-12.87-7.593-20.83-3.385l11.91 22.51z"/><path fill-rule="evenodd" clip-rule="evenodd" fill="#F6D2A2" stroke="#000" stroke-width="3" stroke-linecap="round" d="M392.475 298.493c-.764 15.75-16.5 8.463-23.626 3.54-6.77-4.676-8.75-.79-9.34-10.016-.39-6.064-1.09-12.128-.75-18.216 10.23-.92 21.353 1.51 29.74 7.61 4.32 3.14 12.42 13.16 3.963 17.09"/><path fill-rule="evenodd" clip-rule="evenodd" fill="#C6B198" stroke="#000" stroke-width="3" stroke-linecap="round" d="M392.475 298.493c-2.29-.852-4.717-1.457-6.27-3.528"/><path fill-rule="evenodd" clip-rule="evenodd" fill="#6AD7E5" stroke="#000" stroke-width="3" stroke-linecap="round" d="M195.512 13.124c60.365 0 116.953 8.633 146.452 66.63 26.478 65.005 17.062 135.103 21.1 203.805 3.468 58.99 11.157 127.14-16.21 181.81-28.79 57.51-100.73 71.98-160 69.86-46.555-1.67-102.794-16.86-129.07-59.39-30.825-49.9-16.23-124.1-13.992-179.62 2.652-65.77-17.815-131.75 3.792-196.1C70 33.36 130.45 18.27 195.512 13.12"/><path fill-rule="evenodd" clip-rule="evenodd" fill="#FFF" stroke="#000" stroke-width="2.908" stroke-linecap="round" d="M206.17 94.16c10.837 63.003 113.82 46.345 99.03-17.197-13.265-56.98-102.633-41.208-99.03 17.197"/><path fill-rule="evenodd" clip-rule="evenodd" fill="#FFF" stroke="#000" stroke-width="2.821" stroke-linecap="round" d="M83.103 104.35c14.047 54.85 101.864 40.807 98.554-14.213-3.966-65.895-111.984-53.18-98.554 14.213"/><path fill-rule="evenodd" clip-rule="evenodd" fill="#FFF" stroke="#000" stroke-width="3" stroke-linecap="round" d="M218.594 169.762c.046 8.19 1.86 17.387.312 26.1-2.09 3.953-6.193 4.37-9.73 5.968-4.89-.767-9-3.978-10.962-8.552-1.255-9.946.468-19.576.785-29.526l19.59 6.01z"/><g fill-rule="evenodd" clip-rule="evenodd"><ellipse cx="107.324" cy="95.404" rx="14.829" ry="16.062"/><ellipse fill="#FFF" cx="114.069" cy="99.029" rx="3.496" ry="4.082"/></g><g fill-rule="evenodd" clip-rule="evenodd"><ellipse cx="231.571" cy="91.404" rx="14.582" ry="16.062"/><ellipse fill="#FFF" cx="238.204" cy="95.029" rx="3.438" ry="4.082"/></g><path fill-rule="evenodd" clip-rule="evenodd" fill="#FFF" stroke="#000" stroke-width="3" stroke-linecap="round" d="M176.217 168.87c-6.47 15.68 3.608 47.035 21.163 23.908-1.255-9.946.468-19.576.785-29.526l-21.948 5.618z"/><g fill-rule="evenodd" clip-rule="evenodd"><path fill="#F6D2A2" stroke="#231F20" stroke-width="3" stroke-linecap="round" d="M178.43 138.673c-12.058 1.028-21.915 15.366-15.645 26.71 8.303 15.023 26.836-1.33 38.38.202 13.284.272 24.17 14.047 34.84 2.49 11.866-12.854-5.11-25.373-18.378-30.97l-39.196 1.568z"/><path d="M176.913 138.045c-.893-20.89 38.938-23.503 43.642-6.016 4.692 17.44-41.68 21.49-43.642 6.01-1.565-12.37 0 0 0 0z"/></g></svg></div>
-	</body>
-	<script src="/client.js"></script>
+		}
+
+		@-webkit-keyframes spin {
+			100% {
+				-webkit-transform: rotate(360deg);
+			}
+		}
+
+		@keyframes spin {
+			100% {
+				-webkit-transform: rotate(360deg);
+				transform: rotate(360deg);
+			}
+		}
+	</style>
+</head>
+
+<body>
+	<div class="preload">
+		<svg xmlns="http://www.w3.org/2000/svg" width="44.664" height="62.164" viewBox="0 0 401.98 559.472">
+			<path fill-rule="evenodd" clip-rule="evenodd" fill="#F6D2A2" stroke="#000" stroke-width="3" stroke-linecap="round" d="M10.634 300.493c.764 15.75 16.5 8.463 23.626 3.54 6.765-4.676 8.743-.79 9.337-10.016.39-6.064 1.088-12.128.744-18.216-10.23-.92-21.35 1.51-29.74 7.61-4.32 3.14-12.42 13.16-3.96 17.09"
+			/>
+			<path fill-rule="evenodd" clip-rule="evenodd" fill="#C6B198" stroke="#000" stroke-width="3" stroke-linecap="round" d="M10.634 300.493c2.29-.852 4.717-1.457 6.27-3.528"
+			/>
+			<path fill-rule="evenodd" clip-rule="evenodd" fill="#6AD7E5" stroke="#000" stroke-width="3" stroke-linecap="round" d="M46.997 112.853C-13.3 95.897 31.537 19.19 79.957 50.74l-32.96 62.113zm267.898-67.87c47.727-33.522 90.856 42.11 35.388 61.14l-35.388-61.14z"
+			/>
+			<path fill-rule="evenodd" clip-rule="evenodd" fill="#F6D2A2" stroke="#000" stroke-width="3" stroke-linecap="round" d="M325.16 494.343c12.124 7.5 34.283 30.182 16.097 41.18-17.474 16-27.254-17.56-42.59-22.21 6.604-8.97 14.976-17.15 26.494-18.97z"
+			/>
+			<path clip-rule="evenodd" fill="none" stroke="#000" stroke-width="3" stroke-linecap="round" d="M341.257 535.522c-2.696-5.36-3.6-11.618-8.102-15.94"
+			/>
+			<path fill-rule="evenodd" clip-rule="evenodd" fill="#F6D2A2" stroke="#000" stroke-width="3" stroke-linecap="round" d="M108.58 519.975c-14.23 2.202-22.24 15.04-34.1 21.558-11.18 6.665-15.455-2.134-16.462-3.92-1.752-.8-1.605.744-4.31-1.98-10.36-16.353 10.798-28.307 21.816-36.43 15.346-3.103 24.963 10.2 33.055 20.772z"
+			/>
+			<path clip-rule="evenodd" fill="none" stroke="#000" stroke-width="3" stroke-linecap="round" d="M58.02 537.612c.54-6.233 5.483-10.407 7.837-15.677"
+			/>
+			<path fill-rule="evenodd" clip-rule="evenodd" d="M49.513 91.667c-7.955-4.208-13.79-9.923-8.925-19.124 4.505-8.518 12.874-7.593 20.83-3.385l-11.905 22.51zm288.203-8c7.955-4.208 13.79-9.923 8.925-19.124-4.5-8.518-12.87-7.593-20.83-3.385l11.91 22.51z"
+			/>
+			<path fill-rule="evenodd" clip-rule="evenodd" fill="#F6D2A2" stroke="#000" stroke-width="3" stroke-linecap="round" d="M392.475 298.493c-.764 15.75-16.5 8.463-23.626 3.54-6.77-4.676-8.75-.79-9.34-10.016-.39-6.064-1.09-12.128-.75-18.216 10.23-.92 21.353 1.51 29.74 7.61 4.32 3.14 12.42 13.16 3.963 17.09"
+			/>
+			<path fill-rule="evenodd" clip-rule="evenodd" fill="#C6B198" stroke="#000" stroke-width="3" stroke-linecap="round" d="M392.475 298.493c-2.29-.852-4.717-1.457-6.27-3.528"
+			/>
+			<path fill-rule="evenodd" clip-rule="evenodd" fill="#6AD7E5" stroke="#000" stroke-width="3" stroke-linecap="round" d="M195.512 13.124c60.365 0 116.953 8.633 146.452 66.63 26.478 65.005 17.062 135.103 21.1 203.805 3.468 58.99 11.157 127.14-16.21 181.81-28.79 57.51-100.73 71.98-160 69.86-46.555-1.67-102.794-16.86-129.07-59.39-30.825-49.9-16.23-124.1-13.992-179.62 2.652-65.77-17.815-131.75 3.792-196.1C70 33.36 130.45 18.27 195.512 13.12"
+			/>
+			<path fill-rule="evenodd" clip-rule="evenodd" fill="#FFF" stroke="#000" stroke-width="2.908" stroke-linecap="round" d="M206.17 94.16c10.837 63.003 113.82 46.345 99.03-17.197-13.265-56.98-102.633-41.208-99.03 17.197"
+			/>
+			<path fill-rule="evenodd" clip-rule="evenodd" fill="#FFF" stroke="#000" stroke-width="2.821" stroke-linecap="round" d="M83.103 104.35c14.047 54.85 101.864 40.807 98.554-14.213-3.966-65.895-111.984-53.18-98.554 14.213"
+			/>
+			<path fill-rule="evenodd" clip-rule="evenodd" fill="#FFF" stroke="#000" stroke-width="3" stroke-linecap="round" d="M218.594 169.762c.046 8.19 1.86 17.387.312 26.1-2.09 3.953-6.193 4.37-9.73 5.968-4.89-.767-9-3.978-10.962-8.552-1.255-9.946.468-19.576.785-29.526l19.59 6.01z"
+			/>
+			<g fill-rule="evenodd" clip-rule="evenodd">
+				<ellipse cx="107.324" cy="95.404" rx="14.829" ry="16.062" />
+				<ellipse fill="#FFF" cx="114.069" cy="99.029" rx="3.496" ry="4.082" />
+			</g>
+			<g fill-rule="evenodd" clip-rule="evenodd">
+				<ellipse cx="231.571" cy="91.404" rx="14.582" ry="16.062" />
+				<ellipse fill="#FFF" cx="238.204" cy="95.029" rx="3.438" ry="4.082" />
+			</g>
+			<path fill-rule="evenodd" clip-rule="evenodd" fill="#FFF" stroke="#000" stroke-width="3" stroke-linecap="round" d="M176.217 168.87c-6.47 15.68 3.608 47.035 21.163 23.908-1.255-9.946.468-19.576.785-29.526l-21.948 5.618z"
+			/>
+			<g fill-rule="evenodd" clip-rule="evenodd">
+				<path fill="#F6D2A2" stroke="#231F20" stroke-width="3" stroke-linecap="round" d="M178.43 138.673c-12.058 1.028-21.915 15.366-15.645 26.71 8.303 15.023 26.836-1.33 38.38.202 13.284.272 24.17 14.047 34.84 2.49 11.866-12.854-5.11-25.373-18.378-30.97l-39.196 1.568z"
+				/>
+				<path d="M176.913 138.045c-.893-20.89 38.938-23.503 43.642-6.016 4.692 17.44-41.68 21.49-43.642 6.01-1.565-12.37 0 0 0 0z"
+				/>
+			</g>
+		</svg>
+	</div>
+</body>
+<script src="/client.js"></script>
+
 </html>
