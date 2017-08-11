@@ -81,6 +81,7 @@ type Application struct {
 	warningLines map[string]bool
 	errorLines   map[string]bool
 	undoStack    *undo.Stack
+	changeTimer  *time.Timer
 }
 
 func (a *Application) rerenderIfNeeded() {
@@ -584,6 +585,7 @@ func (a *Application) Render() *vecty.HTML {
 		WarningLines:     a.warningLines,
 		ErrorLines:       a.errorLines,
 		Range:            ranges.New(a.Hash.Ranges),
+		ChangeTimer:      &a.changeTimer,
 		UndoStack:        a.undoStack,
 		HighlightingMode: a.HighlightingMode,
 		ReadonlyMode:     a.isDrawingMode,

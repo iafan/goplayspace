@@ -19,6 +19,10 @@ import (
 	"github.com/iafan/goplayspace/client/util"
 )
 
+// saveStateTimeout defines how much time should pass after the last
+// onChange event for state to be saved to undo stack
+const saveStateTimeout = 500 * time.Millisecond
+
 // Editor implements editor logic
 type Editor struct {
 	vecty.Core
@@ -40,6 +44,7 @@ type Editor struct {
 	ErrorLines       map[string]bool
 	WarningLines     map[string]bool
 	UndoStack        *undo.Stack
+	ChangeTimer      **time.Timer // note this is a pointer to a pointer
 
 	Highlighter     func(s string) string
 	OnTopicChange   func(topic string)
@@ -186,6 +191,15 @@ func (ed *Editor) onChange(e *vecty.Event) {
 	ed.WarningLines = nil
 	ed.ErrorLines = nil
 	ed.Highlight(ed.HighlightingMode)
+
+	t := *ed.ChangeTimer
+	if t == nil {
+		t = time.AfterFunc(saveStateTimeout, ed.saveState)
+		*ed.ChangeTimer = t
+	} else {
+		t.Stop()
+		t.Reset(saveStateTimeout)
+	}
 
 	ed.fireOnChangeEvent()
 	if shouldFireSelChange {
