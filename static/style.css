@@ -227,15 +227,16 @@ kbd {
     background: none;
     outline: none;
     resize: none;
+    color: var(--main-color);
 }
 
 .editor.highlighted {
-    color: rgba(0, 0, 0, 0);
-    caret-color: #000;
+    color: rgba(0, 0, 0, 0) !important;
+    caret-color: var(--main-color);
 }
 
 .safari .editor.highlighted {
-    color: #000;
+    color: var(--main-color) !important;
     -webkit-text-fill-color: rgba(0, 0, 0, 0);
 }
 
@@ -454,8 +455,8 @@ body.dark {
     --highlight-com-color: #777;
 }
 
-.dark .editor.highlighted {
-    caret-color: #fff;
+.dark .editor {
+    color: var(--main-color);
 }
 
 .dark .editor::selection {
