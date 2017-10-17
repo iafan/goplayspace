@@ -18,5 +18,4 @@ func main() {
 	}
 
 	vecty.RenderBody(a)
-	a.WaitForPageLoaded()
 }

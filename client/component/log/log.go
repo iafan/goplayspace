@@ -8,34 +8,28 @@ import (
 	"github.com/gopherjs/vecty"
 	"github.com/gopherjs/vecty/elem"
 	"github.com/iafan/goplayspace/client/api"
+	"github.com/iafan/goplayspace/client/js/document"
 )
 
 var hour = 60 * time.Minute
 var day = 24 * hour
 
 // Log contains the logic behind the log panel
-// exposed on the applicaiton page under '.log' class
+// exposed on the application page under '.log' class
 type Log struct {
 	vecty.Core
 	node *js.Object
 
-	Error  string
-	Events []*api.CompileEvent
-	HasRun bool
+	Error  string              `vecty:"prop"`
+	Events []*api.CompileEvent `vecty:"prop"`
+	HasRun bool                `vecty:"prop"`
 }
 
-func (l *Log) getDOMNode() *js.Object {
-	if l.node == nil {
-		l.node = js.Global.Get("document").Call("querySelector", ".log")
-	}
-	return l.node
-}
-
-func (l *Log) getEvents() []vecty.MarkupOrComponentOrHTML {
+func (l *Log) getEvents() []vecty.MarkupOrChild {
 	if len(l.Events) == 0 {
 		return nil
 	}
-	out := make([]vecty.MarkupOrComponentOrHTML, len(l.Events)+1)
+	out := make([]vecty.MarkupOrChild, len(l.Events)+1)
 
 	var totalDelay time.Duration
 	for _, evt := range l.Events {
@@ -65,9 +59,13 @@ func (l *Log) getEvents() []vecty.MarkupOrComponentOrHTML {
 			text = "D+" + strconv.Itoa(int(deltaDuration/day)) + " " + text
 		}
 		out[i] = elem.Div(
-			vecty.ClassMap{evt.Kind: true},
+			vecty.Markup(
+				vecty.Class(evt.Kind),
+			),
 			vecty.If(totalDelay > 0, elem.Span(
-				vecty.ClassMap{"time": true},
+				vecty.Markup(
+					vecty.Class("time"),
+				),
 				vecty.Text(text),
 			)),
 			vecty.Text(evt.Message),
@@ -83,7 +81,9 @@ func (l *Log) getEvents() []vecty.MarkupOrComponentOrHTML {
 	}
 
 	out[len(out)-1] = elem.Div(
-		vecty.ClassMap{"final": true},
+		vecty.Markup(
+			vecty.Class("final"),
+		),
 		vecty.Text(final),
 	)
 	return out
@@ -98,22 +98,32 @@ func (l *Log) getStatusText() string {
 
 // ScrollToBottom scrolls log area to the bottom
 func (l *Log) ScrollToBottom() {
-	if l.getDOMNode() == nil {
+	if l.node == nil {
 		return
 	}
 	l.node.Set("scrollTop", l.node.Get("scrollHeight").Int())
 }
 
+// Mount implements the vecty.Mounter interface.
+func (l *Log) Mount() {
+	l.node = document.QuerySelector(".log")
+	if l.node == nil {
+		panic("Can't locate .log")
+	}
+}
+
 // Render implements the vecty.Component interface.
 func (l *Log) Render() *vecty.HTML {
 	return elem.Div(
-		vecty.ClassMap{"log": true},
+		vecty.Markup(
+			vecty.Class("log"),
+		),
 		elem.Div(l.getEvents()...),
 		elem.Div(
-			vecty.ClassMap{
-				"status": true,
-				"error":  l.Error != "",
-			},
+			vecty.Markup(
+				vecty.Class("status"),
+				vecty.MarkupIf(l.Error != "", vecty.Class("error")),
+			),
 			vecty.Text(l.getStatusText()),
 		),
 	)

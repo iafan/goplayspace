@@ -49,7 +49,7 @@ type DrawBoard struct {
 	canvasWrapper *js.Object
 	initialized   bool
 
-	Actions draw.ActionList
+	Actions draw.ActionList `vecty:"prop"`
 
 	step int
 
@@ -357,27 +357,33 @@ func (b *DrawBoard) Render() *vecty.HTML {
 	util.Schedule(b.onRendered)
 
 	return elem.Div(
-		vecty.ClassMap{"canvas-lightbox": true},
-		vecty.Attribute("tabindex", 0),
+		vecty.Markup(
+			vecty.Class("canvas-lightbox"),
+			vecty.Attribute("tabindex", 0),
+			event.KeyDown(b.handleKeyDown),
+			event.KeyUp(b.handleKeyUp),
+		),
 		elem.Div(
-			vecty.ClassMap{"canvas-wrapper": true},
+			vecty.Markup(
+				vecty.Class("canvas-wrapper"),
+			),
 			elem.Canvas(),
 			elem.Div(
-				vecty.ClassMap{
-					"gopher": true,
-				},
+				vecty.Markup(
+					vecty.Class("gopher"),
+				),
 			),
 			elem.Div(
-				vecty.ClassMap{"statusbar-wrapper": true},
+				vecty.Markup(
+					vecty.Class("statusbar-wrapper"),
+				),
 				elem.Div(
-					vecty.ClassMap{
-						"statusbar": true,
-					},
-					vecty.UnsafeHTML("<kbd>Tab</kbd> or hold <kbd>Shift</kbd> to accelerate, <kbd>Esc</kbd> to close"),
+					vecty.Markup(
+						vecty.Class("statusbar"),
+						vecty.UnsafeHTML("<kbd>Tab</kbd> or hold <kbd>Shift</kbd> to accelerate, <kbd>Esc</kbd> to close"),
+					),
 				),
 			),
 		),
-		event.KeyDown(b.handleKeyDown),
-		event.KeyUp(b.handleKeyUp),
 	)
 }

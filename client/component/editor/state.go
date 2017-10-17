@@ -11,12 +11,12 @@ func (ed *Editor) getStateAsUndoEntry() *undo.Entry {
 }
 
 func (ed *Editor) saveState() {
-	if ed.getTextarea() == nil {
+	if ed.ta == nil {
 		return
 	}
 
 	text := ed.ta.GetValue()
-	if text == "" || text == ed.InitialValue {
+	if text == "" {
 		return
 	}
 
@@ -31,7 +31,7 @@ func (ed *Editor) saveState() {
 
 // Undo does one undo step
 func (ed *Editor) Undo() {
-	if ed.getTextarea() == nil {
+	if ed.ta == nil {
 		return
 	}
 
@@ -54,7 +54,7 @@ func (ed *Editor) Undo() {
 
 // Redo does one redo step
 func (ed *Editor) Redo() {
-	if ed.getTextarea() == nil {
+	if ed.ta == nil {
 		return
 	}
 

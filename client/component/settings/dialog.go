@@ -7,16 +7,16 @@ import (
 )
 
 // Dialog contains the logic behind the settings dialog
-// exposed on the applicaiton page under '.settings-dialog' class
+// exposed on the application page under '.settings-dialog' class
 type Dialog struct {
 	vecty.Core
 	//node *js.Object
 
-	Theme            string
-	TabWidth         int
-	FontWeight       string
-	UseWebfont       bool
-	HighlightingMode bool
+	Theme            string `vecty:"prop"`
+	TabWidth         int    `vecty:"prop"`
+	FontWeight       string `vecty:"prop"`
+	UseWebfont       bool   `vecty:"prop"`
+	HighlightingMode bool   `vecty:"prop"`
 
 	OnChange func(d *Dialog)
 }
@@ -64,33 +64,45 @@ func (d *Dialog) fireOnChangeEvent() {
 // Render implements the vecty.Component interface.
 func (d *Dialog) Render() *vecty.HTML {
 	return elem.Div(
-		vecty.ClassMap{"settings-dialog": true},
+		vecty.Markup(
+			vecty.Class("settings-dialog"),
+		),
 		elem.Paragraph(
 			elem.Div(
 				vecty.Text("Theme:"),
 			),
 			elem.Select(
+				vecty.Markup(
+					event.Change(d.updateTheme),
+				),
 				elem.Option(
-					vecty.Property("value", "space"),
-					vecty.Property("selected", d.Theme == "space"),
+					vecty.Markup(
+						vecty.Property("value", "space"),
+						vecty.Property("selected", d.Theme == "space"),
+					),
 					vecty.Text("Space"),
 				),
 				elem.Option(
-					vecty.Property("value", "classic"),
-					vecty.Property("selected", d.Theme == "classic"),
+					vecty.Markup(
+						vecty.Property("value", "classic"),
+						vecty.Property("selected", d.Theme == "classic"),
+					),
 					vecty.Text("Classic"),
 				),
 				elem.Option(
-					vecty.Property("value", "light"),
-					vecty.Property("selected", d.Theme == "light"),
+					vecty.Markup(
+						vecty.Property("value", "light"),
+						vecty.Property("selected", d.Theme == "light"),
+					),
 					vecty.Text("Light"),
 				),
 				elem.Option(
-					vecty.Property("value", "dark"),
-					vecty.Property("selected", d.Theme == "dark"),
+					vecty.Markup(
+						vecty.Property("value", "dark"),
+						vecty.Property("selected", d.Theme == "dark"),
+					),
 					vecty.Text("Dark"),
 				),
-				event.Change(d.updateTheme),
 			),
 		),
 		elem.Paragraph(
@@ -98,27 +110,37 @@ func (d *Dialog) Render() *vecty.HTML {
 				vecty.Text("Tab width:"),
 			),
 			elem.Select(
+				vecty.Markup(
+					event.Change(d.updateTabWidth),
+				),
 				elem.Option(
-					vecty.Property("value", "2"),
-					vecty.Property("selected", d.TabWidth == 2),
+					vecty.Markup(
+						vecty.Property("value", "2"),
+						vecty.Property("selected", d.TabWidth == 2),
+					),
 					vecty.Text("2"),
 				),
 				elem.Option(
-					vecty.Property("value", "4"),
-					vecty.Property("selected", d.TabWidth == 4),
+					vecty.Markup(
+						vecty.Property("value", "4"),
+						vecty.Property("selected", d.TabWidth == 4),
+					),
 					vecty.Text("4"),
 				),
 				elem.Option(
-					vecty.Property("value", "6"),
-					vecty.Property("selected", d.TabWidth == 6),
+					vecty.Markup(
+						vecty.Property("value", "6"),
+						vecty.Property("selected", d.TabWidth == 6),
+					),
 					vecty.Text("6"),
 				),
 				elem.Option(
-					vecty.Property("value", "8"),
-					vecty.Property("selected", d.TabWidth == 8),
+					vecty.Markup(
+						vecty.Property("value", "8"),
+						vecty.Property("selected", d.TabWidth == 8),
+					),
 					vecty.Text("8"),
 				),
-				event.Change(d.updateTabWidth),
 			),
 		),
 		elem.Paragraph(
@@ -126,17 +148,23 @@ func (d *Dialog) Render() *vecty.HTML {
 				vecty.Text("Font weight:"),
 			),
 			elem.Select(
+				vecty.Markup(
+					event.Change(d.updateFontWeight),
+				),
 				elem.Option(
-					vecty.Property("value", "lighter"),
-					vecty.Property("selected", d.FontWeight == "lighter"),
+					vecty.Markup(
+						vecty.Property("value", "lighter"),
+						vecty.Property("selected", d.FontWeight == "lighter"),
+					),
 					vecty.Text("Lighter"),
 				),
 				elem.Option(
-					vecty.Property("value", "normal"),
-					vecty.Property("selected", d.FontWeight == "normal"),
+					vecty.Markup(
+						vecty.Property("value", "normal"),
+						vecty.Property("selected", d.FontWeight == "normal"),
+					),
 					vecty.Text("Normal"),
 				),
-				event.Change(d.updateFontWeight),
 			),
 		),
 		elem.Paragraph(
@@ -144,28 +172,38 @@ func (d *Dialog) Render() *vecty.HTML {
 				vecty.Text("‘Fira Code’ font source:"),
 			),
 			elem.Select(
+				vecty.Markup(
+					event.Change(d.updateUseWebfont),
+				),
 				elem.Option(
-					vecty.Property("value", ""),
-					vecty.Property("selected", !d.UseWebfont),
+					vecty.Markup(
+						vecty.Property("value", ""),
+						vecty.Property("selected", !d.UseWebfont),
+					),
 					vecty.Text("System"),
 				),
 				elem.Option(
-					vecty.Property("value", 1),
-					vecty.Property("selected", d.UseWebfont),
+					vecty.Markup(
+						vecty.Property("value", 1),
+						vecty.Property("selected", d.UseWebfont),
+					),
 					vecty.Text("Webfont"),
 				),
-				event.Change(d.updateUseWebfont),
 			),
 		),
 		elem.Paragraph(
 			elem.Input(
-				vecty.Property("id", "highlighting"),
-				vecty.Property("type", "checkbox"),
-				vecty.Property("checked", d.HighlightingMode),
-				event.Change(d.updateHighlighting),
+				vecty.Markup(
+					vecty.Property("id", "highlighting"),
+					vecty.Property("type", "checkbox"),
+					vecty.Property("checked", d.HighlightingMode),
+					event.Change(d.updateHighlighting),
+				),
 			),
 			elem.Label(
-				vecty.Attribute("for", "highlighting"),
+				vecty.Markup(
+					vecty.Attribute("for", "highlighting"),
+				),
 				vecty.Text("Syntax highlighting"),
 			),
 		),

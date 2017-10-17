@@ -37,50 +37,24 @@ type Editor struct {
 	errorsCSS   string
 	warningsCSS string
 
-	InitialValue     string
-	Range            *ranges.Range
-	HighlightingMode bool
-	ReadonlyMode     bool
-	ErrorLines       map[string]bool
-	WarningLines     map[string]bool
-	UndoStack        *undo.Stack
-	ChangeTimer      **time.Timer // note this is a pointer to a pointer
+	Range            *ranges.Range   `vecty:"prop"`
+	HighlightingMode bool            `vecty:"prop"`
+	ReadonlyMode     bool            `vecty:"prop"`
+	ErrorLines       map[string]bool `vecty:"prop"`
+	WarningLines     map[string]bool `vecty:"prop"`
+	UndoStack        *undo.Stack     `vecty:"prop"`
+	ChangeTimer      **time.Timer    // note this is a pointer to a pointer
 
-	Highlighter     func(s string) string
+	Highlighter     func(s string) string `vecty:"prop"`
 	OnTopicChange   func(topic string)
 	OnChange        func(value string)
 	OnLineSelChange func(value string)
 	OnKeyDown       func(e *vecty.Event)
 }
 
-func (ed *Editor) getTextarea() *textarea.Textarea {
-	if ed.ta == nil {
-		obj := document.QuerySelector(".editor")
-		if obj != nil {
-			ed.ta = &textarea.Textarea{obj}
-		}
-	}
-	return ed.ta
-}
-
-func (ed *Editor) getShadow() *Shadow {
-	if ed.sh == nil {
-		obj := document.QuerySelector(".shadow")
-		if obj != nil {
-			ed.sh = &Shadow{obj}
-		}
-	}
-	return ed.sh
-}
-
-// IsReady returns true if textarea can be found on a page
-func (ed *Editor) IsReady() bool {
-	return ed.getTextarea() != nil
-}
-
 // Focus sets focus to the control
 func (ed *Editor) Focus() {
-	if ed.getTextarea() == nil {
+	if ed.ta == nil {
 		console.Log("editor.Focus(): getTextarea() is nil")
 		return
 	}
@@ -89,7 +63,7 @@ func (ed *Editor) Focus() {
 
 // GetSelection gets text selection
 func (ed *Editor) GetSelection() (start, end int) {
-	if ed.getTextarea() == nil {
+	if ed.ta == nil {
 		return -1, -1
 	}
 	return ed.ta.GetSelectionStart(), ed.ta.GetSelectionEnd()
@@ -97,7 +71,7 @@ func (ed *Editor) GetSelection() (start, end int) {
 
 // SetSelection sets text selection
 func (ed *Editor) SetSelection(start, end int) {
-	if ed.getTextarea() == nil {
+	if ed.ta == nil {
 		return
 	}
 	ed.ta.SetSelectionStart(start)
@@ -105,7 +79,7 @@ func (ed *Editor) SetSelection(start, end int) {
 }
 
 func (ed *Editor) updateSelectionInfo(e *vecty.Event) {
-	if ed.getTextarea() == nil || ed.OnTopicChange == nil {
+	if ed.ta == nil || ed.OnTopicChange == nil {
 		return
 	}
 	ss := ed.ta.GetSelectionStart()
@@ -147,7 +121,7 @@ func (ed *Editor) updateSelectionInfo(e *vecty.Event) {
 // ResizeTextarea resizes the height of the textarea
 // to match the computed height of the shadow
 func (ed *Editor) ResizeTextarea() {
-	if ed.getShadow() == nil || ed.getTextarea() == nil {
+	if ed.sh == nil || ed.ta == nil {
 		return
 	}
 
@@ -165,7 +139,7 @@ func (ed *Editor) makeHighlightedText(text string) string {
 
 // Highlight applies highlighting to the editor
 func (ed *Editor) Highlight(on bool) {
-	if ed.getShadow() == nil || ed.getTextarea() == nil {
+	if ed.sh == nil || ed.ta == nil {
 		console.Log("editor.Highlight(): getShadow() or getTextarea() is nil!")
 		return
 	}
@@ -182,7 +156,7 @@ func (ed *Editor) Highlight(on bool) {
 }
 
 func (ed *Editor) onChange(e *vecty.Event) {
-	if ed.getTextarea() == nil {
+	if ed.ta == nil {
 		console.Log("editor.onChange(): getTextarea() is nil!")
 		return
 	}
@@ -214,7 +188,7 @@ func (ed *Editor) cancelEvent(e *vecty.Event) {
 
 // InsertText inserts text in place of selection
 func (ed *Editor) InsertText(text string) {
-	if ed.getTextarea() == nil {
+	if ed.ta == nil {
 		console.Log("editor.InsertText(): getTextarea() is nil!")
 		return
 	}
@@ -225,7 +199,7 @@ func (ed *Editor) InsertText(text string) {
 // WrapSelection wraps selection with the provided
 // starting and ending text snippets
 func (ed *Editor) WrapSelection(begin, end string) {
-	if ed.getTextarea() == nil {
+	if ed.ta == nil {
 		console.Log("editor.WrapSelection(): getTextarea() is nil!")
 		return
 	}
@@ -237,7 +211,7 @@ func (ed *Editor) WrapSelection(begin, end string) {
 
 // SetText replaces the editor text
 func (ed *Editor) SetText(text string) {
-	if ed.getTextarea() == nil {
+	if ed.ta == nil {
 		console.Log("editor.SetText() getTextarea() is nil")
 		return
 	}
@@ -249,7 +223,7 @@ func (ed *Editor) SetText(text string) {
 
 // SetState replaces the editor text and sets selection
 func (ed *Editor) SetState(text string, selStart, selEnd int) {
-	if ed.getTextarea() == nil {
+	if ed.ta == nil {
 		console.Log("editor.SetState() getTextarea() is nil")
 		return
 	}
@@ -303,7 +277,7 @@ func (ed *Editor) toggleLine(n int) {
 }
 
 func (ed *Editor) toggleLineSelection() {
-	if ed.getTextarea() == nil {
+	if ed.ta == nil {
 		return
 	}
 	ss := ed.ta.GetSelectionStart()
@@ -322,7 +296,7 @@ func (ed *Editor) toggleLineSelection() {
 }
 
 func (ed *Editor) getIndent() int {
-	if ed.getTextarea() == nil {
+	if ed.ta == nil {
 		return 0
 	}
 	ss := ed.ta.GetSelectionStart()
@@ -351,7 +325,7 @@ func (ed *Editor) handleKeyDown(e *vecty.Event) {
 	ed.ctrlDown = e.Get("ctrlKey").Bool()
 	ed.metaDown = e.Get("metaKey").Bool()
 
-	if ed.getTextarea() == nil {
+	if ed.ta == nil {
 		return
 	}
 
@@ -442,7 +416,7 @@ func (ed *Editor) handleKeyDown(e *vecty.Event) {
 }
 
 func (ed *Editor) handleKeyPress(e *vecty.Event) {
-	if ed.getTextarea() == nil {
+	if ed.ta == nil {
 		return
 	}
 	before, after := ed.ta.GetSymbolsAroundSelection()
@@ -511,7 +485,7 @@ func (ed *Editor) handleScrollerClick(e *vecty.Event) {
 
 func (ed *Editor) afterRender() {
 	list := js.Global.Get("document").Call("querySelectorAll", ".shadow ol li")
-	if list == nil || list.Length() == 0 {
+	if list == nil || list.Length() == 0 || ed.sh == nil || ed.ta == nil {
 		time.AfterFunc(5*time.Millisecond, ed.afterRender)
 		return
 	}
@@ -556,46 +530,70 @@ func (ed *Editor) updateStateFromWarnings() {
 	}
 }
 
+// Mount implements the vecty.Mounter interface.
+func (ed *Editor) Mount() {
+	obj := document.QuerySelector(".editor")
+	if obj == nil {
+		panic("Can't locate .editor")
+	}
+	ed.ta = &textarea.Textarea{obj}
+
+	obj = document.QuerySelector(".shadow")
+	if obj == nil {
+		panic("Can't locate .shadow")
+	}
+	ed.sh = &Shadow{obj}
+}
+
 // Render implements the vecty.Component interface.
 func (ed *Editor) Render() *vecty.HTML {
 	ed.updateStateFromRanges()
 	ed.updateStateFromWarnings()
 	ed.updateStateFromErrors()
 	util.Schedule(ed.afterRender)
-	return elem.Div(
-		vecty.ClassMap{"scroller": true},
-		elem.TextArea(
-			vecty.ClassMap{
-				"editor":      true,
-				"highlighted": ed.HighlightingMode,
-			},
-			vecty.Property("autocapitalize", "off"),
-			vecty.Attribute("autocomplete", "off"),
-			vecty.Attribute("autocorrect", "off"),
-			vecty.Property("autofocus", true),
-			vecty.Property("spellcheck", false),
-			vecty.Property("readonly", ed.ReadonlyMode),
-			//vecty.Text(ed.InitialValue), // only sets the value initially!
 
-			event.KeyDown(ed.handleKeyDown),
-			event.KeyPress(ed.handleKeyPress),
-			event.Select(ed.updateSelectionInfo),
-			event.Input(ed.onChange),
+	return elem.Div(
+		vecty.Markup(
+			vecty.Class("scroller"),
+			event.MouseDown(ed.handleScrollerClick),
+		),
+		elem.TextArea(
+			vecty.Markup(
+				vecty.Class("editor"),
+				vecty.MarkupIf(ed.HighlightingMode, vecty.Class("highlighted")),
+				vecty.Property("autocapitalize", "off"),
+				vecty.Attribute("autocomplete", "off"),
+				vecty.Attribute("autocorrect", "off"),
+				vecty.Property("autofocus", true),
+				vecty.Property("spellcheck", false),
+				vecty.Property("readonly", ed.ReadonlyMode),
+				event.KeyDown(ed.handleKeyDown),
+				event.KeyPress(ed.handleKeyPress),
+				event.Select(ed.updateSelectionInfo),
+				event.Input(ed.onChange),
+			),
 		),
 		elem.Div(
-			vecty.ClassMap{"shadow": true},
-			vecty.UnsafeHTML(ed.highlighted),
-			event.ContextMenu(ed.cancelEvent),
+			vecty.Markup(
+				vecty.Class("shadow"),
+				vecty.UnsafeHTML(ed.highlighted),
+				event.ContextMenu(ed.cancelEvent),
+			),
 		),
 		elem.Style(
-			vecty.UnsafeHTML(ed.selLinesCSS),
+			vecty.Markup(
+				vecty.UnsafeHTML(ed.selLinesCSS),
+			),
 		),
 		elem.Style(
-			vecty.UnsafeHTML(ed.warningsCSS),
+			vecty.Markup(
+				vecty.UnsafeHTML(ed.warningsCSS),
+			),
 		),
 		elem.Style(
-			vecty.UnsafeHTML(ed.errorsCSS),
+			vecty.Markup(
+				vecty.UnsafeHTML(ed.errorsCSS),
+			),
 		),
-		event.MouseDown(ed.handleScrollerClick),
 	)
 }

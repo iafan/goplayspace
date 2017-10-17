@@ -510,17 +510,9 @@ func (a *Application) formatShortcutPressed(e interface{}) {
 	a.wantRerender("formatShortcutPressed")
 }
 
-// WaitForPageLoaded waits till page is loaded (editor is ready)
-// and then calls onPageLoaded()
-func (a *Application) WaitForPageLoaded() {
-	if a.editor.IsReady() {
-		a.onPageLoaded()
-	} else {
-		time.AfterFunc(domMonitorInterval, a.WaitForPageLoaded)
-	}
-}
+// Mount implements the vecty.Mounter interface.
+func (a *Application) Mount() {
 
-func (a *Application) onPageLoaded() {
 	switch a.Hash.ID {
 	case "":
 		a.setEditorState(initialCode, initialCaretPos, initialCaretPos)
@@ -531,6 +523,11 @@ func (a *Application) onPageLoaded() {
 		a.onHashChange(a.Hash)
 	}
 	window.AddEventListener("resize", a.onResize)
+}
+
+// Unmount implements the vecty.Unmounter interface.
+func (a *Application) Unmount() {
+	window.RemoveEventListener("resize", a.onResize)
 }
 
 func (a *Application) onResize() {
@@ -600,63 +597,92 @@ func (a *Application) Render() *vecty.HTML {
 	tabWidthClass := "tabwidth-" + strconv.Itoa(a.TabWidth)
 
 	return elem.Body(
-		vecty.ClassMap{
-			"safari":           util.IsSafari(),
-			"ios":              util.IsIOS(),
-			"drawingmode":      a.isDrawingMode,
-			a.Theme:            true,
-			tabWidthClass:      true,
-			a.getGlobalState(): true,
-		},
+		vecty.Markup(
+			event.KeyDown(a.handleKeyDown),
+			vecty.Class(a.Theme),
+			vecty.Class(tabWidthClass),
+			vecty.Class(a.getGlobalState()),
+			vecty.MarkupIf(util.IsSafari(), vecty.Class("safari")),
+			vecty.MarkupIf(util.IsIOS(), vecty.Class("ios")),
+			vecty.MarkupIf(a.isDrawingMode, vecty.Class("drawingmode")),
+		),
 		elem.Div(
-			vecty.ClassMap{"header": true},
-			elem.Div(
-				vecty.ClassMap{"logo": true},
+			vecty.Markup(
+				vecty.Class("header"),
 			),
 			elem.Div(
-				vecty.ClassMap{"menu": true},
+				vecty.Markup(
+					vecty.Class("logo"),
+				),
+			),
+			elem.Div(
+				vecty.Markup(
+					vecty.Class("menu"),
+				),
 				elem.Span(
-					vecty.ClassMap{"title": true},
-					vecty.UnsafeHTML("The Go<br/>Play Space"),
+					vecty.Markup(
+						vecty.Class("title"),
+						vecty.UnsafeHTML("The Go<br/>Play Space"),
+					),
 				),
 				elem.Button(
-					vecty.UnsafeHTML("Run <cmd>"+a.modifierKey+"+↵</cmd>"),
-					vecty.Property("disabled", a.err != "" || a.isCompiling),
-					event.Click(a.runButtonClick),
+					vecty.Markup(
+						vecty.Property("disabled", a.err != "" || a.isCompiling),
+						vecty.UnsafeHTML("Run <cmd>"+a.modifierKey+"+↵</cmd>"),
+						event.Click(a.runButtonClick),
+					),
 				),
 				elem.Button(
-					vecty.UnsafeHTML("Format <cmd>"+a.modifierKey+"+S</cmd>"),
-					vecty.Property("disabled", a.err != ""),
-					event.Click(a.formatButtonClick),
+					vecty.Markup(
+						vecty.Property("disabled", a.err != ""),
+						vecty.UnsafeHTML("Format <cmd>"+a.modifierKey+"+S</cmd>"),
+						event.Click(a.formatButtonClick),
+					),
 				),
 				elem.Button(
-					vecty.UnsafeHTML("Share"),
-					vecty.Property("disabled", a.isSharing || a.Hash.ID != ""),
-					event.Click(a.shareButtonClick),
+					vecty.Markup(
+						vecty.Property("disabled", a.isSharing || a.Hash.ID != ""),
+						vecty.UnsafeHTML("Share"),
+						event.Click(a.shareButtonClick),
+					),
 				),
 			),
 			elem.Div(
-				vecty.ClassMap{"settings": true},
+				vecty.Markup(
+					vecty.Class("settings"),
+				),
 				elem.Button(
-					vecty.UnsafeHTML("Settings"),
-					event.Click(a.settingsButtonClick),
+					vecty.Markup(
+						vecty.UnsafeHTML("Settings"),
+						event.Click(a.settingsButtonClick),
+					),
 				),
 			),
 		),
 		elem.Div(
-			vecty.ClassMap{"body-wrapper": true},
+			vecty.Markup(
+				vecty.Class("body-wrapper"),
+			),
 			elem.Div(
-				vecty.ClassMap{"content-wrapper": true},
+				vecty.Markup(
+					vecty.Class("content-wrapper"),
+				),
 				a.editor,
 				elem.Div(
-					vecty.ClassMap{"help-wrapper": true},
+					vecty.Markup(
+						vecty.Class("help-wrapper"),
+					),
 					vecty.If(a.Topic == "" && !a.showDrawHelp, elem.Div(
-						vecty.ClassMap{"help": true},
-						vecty.UnsafeHTML(helpHTML),
+						vecty.Markup(
+							vecty.Class("help"),
+							vecty.UnsafeHTML(helpHTML),
+						),
 					)),
 					vecty.If(a.Topic == "" && a.showDrawHelp, elem.Div(
-						vecty.ClassMap{"help": true},
-						vecty.UnsafeHTML(drawHelpHTML),
+						vecty.Markup(
+							vecty.Class("help"),
+							vecty.UnsafeHTML(drawHelpHTML),
+						),
 					)),
 					vecty.If(a.Topic != "", &help.Browser{
 						Imports: a.Imports,
@@ -672,7 +698,9 @@ func (a *Application) Render() *vecty.HTML {
 				),
 			),
 			elem.Div(
-				vecty.ClassMap{"log-wrapper": true},
+				vecty.Markup(
+					vecty.Class("log-wrapper"),
+				),
 				a.log,
 				&splitter.Splitter{
 					Selector:         ".log-wrapper",
@@ -694,8 +722,9 @@ func (a *Application) Render() *vecty.HTML {
 			Actions: a.actions,
 		}),
 		elem.Style(
-			vecty.UnsafeHTML(a.getOverrideCSS()),
+			vecty.Markup(
+				vecty.UnsafeHTML(a.getOverrideCSS()),
+			),
 		),
-		event.KeyDown(a.handleKeyDown),
 	)
 }

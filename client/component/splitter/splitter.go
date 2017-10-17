@@ -142,11 +142,11 @@ func (s *Splitter) onDocumentMouseUp(e *vecty.Event) {
 // Render implements the vecty.Component interface.
 func (s *Splitter) Render() *vecty.HTML {
 	return elem.Div(
-		vecty.ClassMap{
-			"splitter": true,
-			"col":      s.Type == LeftPane || s.Type == RightPane,
-			"row":      s.Type == TopPane || s.Type == BottomPane,
-		},
-		event.MouseDown(s.onMouseDown),
+		vecty.Markup(
+			vecty.Class("splitter"),
+			event.MouseDown(s.onMouseDown),
+			vecty.MarkupIf(s.Type == LeftPane || s.Type == RightPane, vecty.Class("col")),
+			vecty.MarkupIf(s.Type == TopPane || s.Type == BottomPane, vecty.Class("row")),
+		),
 	)
 }

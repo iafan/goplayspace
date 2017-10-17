@@ -17,8 +17,8 @@ var cachedURL string
 type Browser struct {
 	vecty.Core
 
-	Topic   string
-	Imports map[string]string
+	Topic   string            `vecty:"prop"`
+	Imports map[string]string `vecty:"prop"`
 }
 
 func (h *Browser) getURL() string {
@@ -60,7 +60,9 @@ func (h *Browser) getCachedURL() string {
 // Render implements the vecty.Component interface.
 func (h *Browser) Render() *vecty.HTML {
 	return elem.InlineFrame(
-		vecty.ClassMap{"help-browser": true},
-		vecty.Property("src", h.getCachedURL()),
+		vecty.Markup(
+			vecty.Class("help-browser"),
+			vecty.Property("src", h.getCachedURL()),
+		),
 	)
 }
