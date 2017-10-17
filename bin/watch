@@ -7,6 +7,6 @@
 # but you will need to restart the server for it to start serving non-gzipped
 # version of client.js and client.js.map.
 
+rm ../static/*.gz
 cd ../client
-rm *.gz
 gopherjs build -m -w *.go -o ../static/client.js
