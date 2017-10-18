@@ -4,8 +4,8 @@ import (
 	"github.com/gopherjs/gopherjs/js"
 )
 
-// Shadow contains the logic behind the shadow syntax highligher
-// exposed on the applicaiton page under '.shadow' class
+// Shadow contains the logic behind the shadow syntax highlighter
+// exposed on the application page under '.shadow' class
 type Shadow struct {
 	*js.Object
 }

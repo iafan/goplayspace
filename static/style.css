@@ -377,7 +377,7 @@ kbd {
     margin-left: 1em;
 }
 
-/* Syntax highligher (light scheme) */
+/* Syntax highlighter (light scheme) */
 
 .kwd {
     color: var(--highlight-kwd-color);
