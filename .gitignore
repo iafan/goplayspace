@@ -1,3 +1,4 @@
+.vscode
 bin/goplayspace
 static/client.js
 *.map
