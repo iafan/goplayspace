@@ -31,11 +31,11 @@ func (l *Log) getDOMNode() *js.Object {
 	return l.node
 }
 
-func (l *Log) getEvents() []vecty.MarkupOrComponentOrHTML {
+func (l *Log) getEvents() []vecty.MarkupOrChild {
 	if len(l.Events) == 0 {
 		return nil
 	}
-	out := make([]vecty.MarkupOrComponentOrHTML, len(l.Events)+1)
+	out := make([]vecty.MarkupOrChild, len(l.Events)+1)
 
 	var totalDelay time.Duration
 	for _, evt := range l.Events {
