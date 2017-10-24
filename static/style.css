@@ -1,180 +1,180 @@
 body {
-    --main-bgcolor: #f3f5f6;
-    --main-color: #000;
-    --link-color: #49e;
-    --header-bgcolor: #fff;
-    --header-color: #000;
-    --footer-bgcolor: #fff;
-    --border-color: #ccc;
-    --warn-bgcolor: rgba(255, 153, 0, 0.1);
-    --error-bgcolor: rgba(255, 0, 0, 0.1);
-    --sel-bgcolor: rgba(255, 204, 0, 0.3);
-    --header-button-bgcolor: #fff;
-    --header-button-border-color: rgba(0, 0, 0, 0.3);
-    --header-button-color: #000;
+	--main-bgcolor: #f3f5f6;
+	--main-color: #000;
+	--link-color: #49e;
+	--header-bgcolor: #fff;
+	--header-color: #000;
+	--footer-bgcolor: #fff;
+	--border-color: #ccc;
+	--warn-bgcolor: rgba(255, 153, 0, 0.1);
+	--error-bgcolor: rgba(255, 0, 0, 0.1);
+	--sel-bgcolor: rgba(255, 204, 0, 0.3);
+	--header-button-bgcolor: #fff;
+	--header-button-border-color: rgba(0, 0, 0, 0.3);
+	--header-button-color: #000;
 
-    --dialog-bgcolor: #fff;
-    --dialog-color: #000;
+	--dialog-bgcolor: #fff;
+	--dialog-color: #000;
 
-    --highlight-kwd-color: #d00;
-    --highlight-pln-color: #000;
-    --highlight-str-color: #090;
-    --highlight-pun-color: #666;
-    --highlight-dec-color: #f90;
-    --highlight-typ-color: #49e;
-    --highlight-com-color: #999;
+	--highlight-kwd-color: #d00;
+	--highlight-pln-color: #000;
+	--highlight-str-color: #090;
+	--highlight-pun-color: #666;
+	--highlight-dec-color: #f90;
+	--highlight-typ-color: #49e;
+	--highlight-com-color: #999;
 }
 
 body {
-    font-size: 14px;
-    line-height: 18px;
-    -webkit-text-size-adjust: none;
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial,
-        sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
-    margin: 0;
-    background: var(--main-bgcolor);
-    color: var(--main-color);
-    overflow: hidden;
+	font-size: 14px;
+	line-height: 18px;
+	-webkit-text-size-adjust: none;
+	font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif, 'Apple Color Emoji',
+		'Segoe UI Emoji', 'Segoe UI Symbol';
+	margin: 0;
+	background: var(--main-bgcolor);
+	color: var(--main-color);
+	overflow: hidden;
 }
 
 body.moving iframe {
-    pointer-events: none; /* for mouse capturing to work properly when moving splitters */
+	pointer-events: none; /* for mouse capturing to work properly when moving splitters */
 }
 
 a {
-    color: var(--link-color);
+	color: var(--link-color);
 }
 
 .header {
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    width: 100%;
-    height: 55px;
-    box-sizing: border-box;
-    overflow: hidden;
-    z-index: 2;
-    border-bottom: 1px solid var(--border-color);
-    display: flex;
-    align-items: center;
-    background: var(--header-bgcolor);
-    color: var(--header-color);
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	width: 100%;
+	height: 55px;
+	box-sizing: border-box;
+	overflow: hidden;
+	z-index: 2;
+	border-bottom: 1px solid var(--border-color);
+	display: flex;
+	align-items: center;
+	background: var(--header-bgcolor);
+	color: var(--header-color);
 }
 
 .header .logo {
-    display: inline-block;
-    width: 63px;
-    height: 48px;
-    background: url(gopher.svg);
-    background-size: cover;
-    position: absolute;
-    bottom: 0;
-    left: 10px;
+	display: inline-block;
+	width: 63px;
+	height: 48px;
+	background: url(gopher.svg);
+	background-size: cover;
+	position: absolute;
+	bottom: 0;
+	left: 10px;
 }
 
 body.warning .header .logo {
-    background-image: url(warning.svg);
+	background-image: url(warning.svg);
 }
 
 body.error .header .logo {
-    background-image: url(error.svg);
+	background-image: url(error.svg);
 }
 
 .header .menu {
-    margin-left: 70px;
-    display: flex;
-    align-items: center;
-    position: relative;
+	margin-left: 70px;
+	display: flex;
+	align-items: center;
+	position: relative;
 }
 
 .header .settings {
-    position: fixed;
-    right: 1.2em;
-    top: 14px;
+	position: fixed;
+	right: 1.2em;
+	top: 14px;
 }
 
 .header .settings select {
-    -moz-appearance: none;
-    -webkit-appearance: none;
-    appearance: none;
+	-moz-appearance: none;
+	-webkit-appearance: none;
+	appearance: none;
 
-    outline: none;
-    border: none;
-    background: none;
-    border-bottom: 1px dotted;
-    border-radius: 0;
-    color: inherit;
-    font-size: inherit;
-    padding: 0;
+	outline: none;
+	border: none;
+	background: none;
+	border-bottom: 1px dotted;
+	border-radius: 0;
+	color: inherit;
+	font-size: inherit;
+	padding: 0;
 }
 
 .header .settings select option {
-    padding: 0;
-    color: initial;
+	padding: 0;
+	color: initial;
 }
 
 .header .title {
-    margin: 0 1em;
-    display: inline-block;
+	margin: 0 1em;
+	display: inline-block;
 }
 
 button {
-    min-width: 6em;
-    font-size: 14px;
-    background: var(--header-button-bgcolor);
-    color: var(--header-button-color);
-    border: 1px solid var(--header-button-border-color);
-    border-radius: 3px;
-    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
-    margin: 0 0.5em;
-    padding: 0.3em 1em;
+	min-width: 6em;
+	font-size: 14px;
+	background: var(--header-button-bgcolor);
+	color: var(--header-button-color);
+	border: 1px solid var(--header-button-border-color);
+	border-radius: 3px;
+	box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+	margin: 0 0.5em;
+	padding: 0.3em 1em;
 }
 
 button[disabled] {
-    opacity: 0.5;
+	opacity: 0.5;
 }
 
 button cmd {
-    opacity: 0.4;
-    font-size: 90%;
+	opacity: 0.4;
+	font-size: 90%;
 }
 
 .ios button cmd {
-    display: none;
+	display: none;
 }
 
 .body-wrapper {
-    position: absolute;
-    top: 55px;
-    bottom: 0;
-    width: 100%;
-    box-sizing: border-box;
+	position: absolute;
+	top: 55px;
+	bottom: 0;
+	width: 100%;
+	box-sizing: border-box;
 }
 
 .content-wrapper {
-    position: absolute;
-    top: 0;
-    width: 100%;
-    height: 75%;
-    box-sizing: border-box;
-    border-bottom: 1px solid var(--border-color);
+	position: absolute;
+	top: 0;
+	width: 100%;
+	height: 75%;
+	box-sizing: border-box;
+	border-bottom: 1px solid var(--border-color);
 }
 
 .log-wrapper {
-    position: absolute;
-    bottom: 0;
-    width: 100%;
-    height: 25%;
-    box-sizing: border-box;
+	position: absolute;
+	bottom: 0;
+	width: 100%;
+	height: 25%;
+	box-sizing: border-box;
 }
 
 .scroller,
 .help-wrapper {
-    position: absolute;
-    top: 0;
-    height: 100%;
-    width: 50%;
-    box-sizing: border-box;
+	position: absolute;
+	top: 0;
+	height: 100%;
+	width: 50%;
+	box-sizing: border-box;
 }
 
 .scroller {
@@ -184,8 +184,8 @@ button cmd {
 }
 
 .help-wrapper {
-    right: 0;
-    overflow: hidden;
+	right: 0;
+	overflow: hidden;
 }
 
 .editor,
@@ -194,518 +194,518 @@ button cmd {
 textarea,
 code,
 kbd {
-    font-size: 14px;
-    line-height: 18px;
-    font-family: "Fira Code", Menlo, Consolas, monospace;
+	font-size: 14px;
+	line-height: 18px;
+	font-family: 'Fira Code', Menlo, Consolas, monospace;
 }
 
 code,
 kbd {
-    line-height: 14px;
+	line-height: 14px;
 }
 
 .editor,
 .shadow,
 .log {
-    padding: 0.5em;
+	padding: 0.5em;
 }
 
 .editor,
 .shadow {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    box-sizing: border-box;
-    overflow: hidden;
-    padding-left: 55px;
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	box-sizing: border-box;
+	overflow: hidden;
+	padding-left: 55px;
 }
 
 .editor {
-    border: 0;
-    margin: 0;
-    background: none;
-    outline: none;
-    resize: none;
-    color: var(--main-color);
+	border: 0;
+	margin: 0;
+	background: none;
+	outline: none;
+	resize: none;
+	color: var(--main-color);
 }
 
 .editor.highlighted {
-    color: rgba(0, 0, 0, 0) !important;
-    caret-color: var(--main-color);
+	color: rgba(0, 0, 0, 0) !important;
+	caret-color: var(--main-color);
 }
 
 .safari .editor.highlighted {
-    color: var(--main-color) !important;
-    -webkit-text-fill-color: rgba(0, 0, 0, 0);
+	color: var(--main-color) !important;
+	-webkit-text-fill-color: rgba(0, 0, 0, 0);
 }
 
 .ios .editor {
-    /* see https://stackoverflow.com/questions/6890149/remove-3-pixels-in-ios-webkit-textarea */
-    margin-left: -3px;
+	/* see https://stackoverflow.com/questions/6890149/remove-3-pixels-in-ios-webkit-textarea */
+	margin-left: -3px;
 }
 
 .editor,
 .log,
 .shadow ol li {
-    white-space: pre-wrap;
-    word-wrap: break-word;
+	white-space: pre-wrap;
+	word-wrap: break-word;
 }
 
 .shadow {
-    pointer-events: none;
-    color: rgba(0, 0, 0, 0);
+	pointer-events: none;
+	color: rgba(0, 0, 0, 0);
 }
 
 .shadow ol {
-    margin: 0;
-    padding: 0;
-    counter-reset: li;
-    list-style-type: none;
+	margin: 0;
+	padding: 0;
+	counter-reset: li;
+	list-style-type: none;
 }
 
 .shadow ol li {
-    margin: 0;
-    padding: 0;
-    min-height: 18px;
+	margin: 0;
+	padding: 0;
+	min-height: 18px;
 }
 
 .shadow ol li::before {
-    content: counter(li);
-    margin-left: -40px;
-    display: inline-block;
-    width: 40px;
-    color: rgba(0, 0, 0, 0.4);
-    counter-increment: li;
-    font-size: 10px;
-    text-align: right;
-    box-sizing: border-box;
-    padding-right: 15px;
-    overflow: hidden;
-    height: 18px;
-    float: left;
-    pointer-events: all;
+	content: counter(li);
+	margin-left: -40px;
+	display: inline-block;
+	width: 40px;
+	color: rgba(0, 0, 0, 0.4);
+	counter-increment: li;
+	font-size: 10px;
+	text-align: right;
+	box-sizing: border-box;
+	padding-right: 15px;
+	overflow: hidden;
+	height: 18px;
+	float: left;
+	pointer-events: all;
 }
 
 .log {
-    width: 100%;
-    height: 100%;
-    box-sizing: border-box;
-    overflow: auto;
-    background: var(--footer-bgcolor);
+	width: 100%;
+	height: 100%;
+	box-sizing: border-box;
+	overflow: auto;
+	background: var(--footer-bgcolor);
 }
 
 .log .time {
-    padding-right: 1em;
-    opacity: 0.5;
+	padding-right: 1em;
+	opacity: 0.5;
 }
 
 .log .stderr {
-    color: #d00;
+	color: #d00;
 }
 
 .log .final {
-    opacity: 0.5;
-    font-style: italic;
-    margin-top: 1em;
+	opacity: 0.5;
+	font-style: italic;
+	margin-top: 1em;
 }
 
 .log .status::before {
-    content: "›";
-    color: var(--main-color);
-    opacity: 0.5;
-    display: inline-block;
-    margin-left: -1em;
-    width: 1em;
+	content: '›';
+	color: var(--main-color);
+	opacity: 0.5;
+	display: inline-block;
+	margin-left: -1em;
+	width: 1em;
 }
 
 .log .status {
-    color: #0a0;
-    margin-top: 1em;
-    margin-left: 1em;
+	color: #0a0;
+	margin-top: 1em;
+	margin-left: 1em;
 }
 
 .log .status.error {
-    color: #d00;
+	color: #d00;
 }
 
 .log .status .prefix {
-    color: rgba(0, 0, 0, 0.5);
+	color: rgba(0, 0, 0, 0.5);
 }
 
 /* Help styles */
 
 .help-browser {
-    position: absolute;
-    bottom: -1px; /* to hide odd 1px div#lowframe on golang.org */
-    left: 0;
-    width: 100%;
-    height: 100%;
-    box-sizing: border-box;
-    border: 0;
+	position: absolute;
+	bottom: -1px; /* to hide odd 1px div#lowframe on golang.org */
+	left: 0;
+	width: 100%;
+	height: 100%;
+	box-sizing: border-box;
+	border: 0;
 }
 
 .help {
-    height: 100%;
-    box-sizing: border-box;
-    padding: 1em;
-    overflow: auto;
+	height: 100%;
+	box-sizing: border-box;
+	padding: 1em;
+	overflow: auto;
 }
 
 .help h1 {
-    font-size: 20px;
-    font-weight: normal;
-    margin: 0;
+	font-size: 20px;
+	font-weight: normal;
+	margin: 0;
 }
 
 .help h2 {
-    font-size: 17px;
-    font-weight: normal;
-    margin: 1.5em 0 0;
+	font-size: 17px;
+	font-weight: normal;
+	margin: 1.5em 0 0;
 }
 
 .help code {
-    display: inline-block;
-    border: 1px solid rgba(0, 0, 0, 0.2);
-    border-radius: 2px;
-    padding: 0 0.3em;
+	display: inline-block;
+	border: 1px solid rgba(0, 0, 0, 0.2);
+	border-radius: 2px;
+	padding: 0 0.3em;
 }
 
 .help .github-button {
-    position: relative;
-    top: 5px;
-    margin-left: 1em;
+	position: relative;
+	top: 5px;
+	margin-left: 1em;
 }
 
 /* Syntax highlighter (light scheme) */
 
 .kwd {
-    color: var(--highlight-kwd-color);
+	color: var(--highlight-kwd-color);
 }
 .pln {
-    color: var(--highlight-pln-color);
+	color: var(--highlight-pln-color);
 }
 .str {
-    color: var(--highlight-str-color);
+	color: var(--highlight-str-color);
 }
 .pun {
-    color: var(--highlight-pun-color);
+	color: var(--highlight-pun-color);
 }
 .dec {
-    color: var(--highlight-dec-color);
+	color: var(--highlight-dec-color);
 }
 .typ {
-    color: var(--highlight-typ-color);
+	color: var(--highlight-typ-color);
 }
 .com {
-    color: var(--highlight-com-color);
+	color: var(--highlight-com-color);
 }
 
 /* Classic play.golang.org theme */
 
 body.classic {
-    --main-bgcolor: #ffd;
-    --header-bgcolor: hsl(209, 51%, 92%);
+	--main-bgcolor: #ffd;
+	--header-bgcolor: hsl(209, 51%, 92%);
 
-    --header-button-bgcolor: #375eab;
-    --header-button-border-color: #375eab;
-    --header-button-color: #fff;
+	--header-button-bgcolor: #375eab;
+	--header-button-border-color: #375eab;
+	--header-button-color: #fff;
 }
 
 /* Space theme */
 
 body.space {
-    --main-bgcolor: #e8e6e1;
-    --header-bgcolor: #2c2041;
-    --header-color: rgba(255, 255, 255, 0.6);
-    --footer-bgcolor: #f5f5f3;
-    --link-color: #6c45b9;
-    --header-button-bgcolor: rgba(255, 255, 255, 0.15);
-    --header-button-border-color: rgba(255, 255, 255, 0.15);
-    --header-button-color: #e8e6e1;
+	--main-bgcolor: #e8e6e1;
+	--header-bgcolor: #2c2041;
+	--header-color: rgba(255, 255, 255, 0.6);
+	--footer-bgcolor: #f5f5f3;
+	--link-color: #6c45b9;
+	--header-button-bgcolor: rgba(255, 255, 255, 0.15);
+	--header-button-border-color: rgba(255, 255, 255, 0.15);
+	--header-button-color: #e8e6e1;
 
-    --highlight-kwd-color: #cc229d;
-    --highlight-typ-color: #8a67d0;
+	--highlight-kwd-color: #cc229d;
+	--highlight-typ-color: #8a67d0;
 }
 
 /* Dark theme */
 
 body.dark {
-    --main-bgcolor: #333;
-    --main-color: #ccc;
-    --link-color: #0bc;
-    --header-bgcolor: #222;
-    --header-color: rgba(255, 255, 255, 0.6);
-    --footer-bgcolor: #222;
-    --border-color: #555;
-    --warn-bgcolor: rgba(255, 153, 0, 0.3);
-    --error-bgcolor: rgba(255, 0, 0, 0.3);
-    --header-button-bgcolor: rgba(255, 255, 255, 0.15);
-    --header-button-border-color: rgba(255, 255, 255, 0.15);
-    --header-button-color: #ccc;
+	--main-bgcolor: #333;
+	--main-color: #ccc;
+	--link-color: #0bc;
+	--header-bgcolor: #222;
+	--header-color: rgba(255, 255, 255, 0.6);
+	--footer-bgcolor: #222;
+	--border-color: #555;
+	--warn-bgcolor: rgba(255, 153, 0, 0.3);
+	--error-bgcolor: rgba(255, 0, 0, 0.3);
+	--header-button-bgcolor: rgba(255, 255, 255, 0.15);
+	--header-button-border-color: rgba(255, 255, 255, 0.15);
+	--header-button-color: #ccc;
 
-    --dialog-bgcolor: #444;
-    --dialog-color: #ddd;
+	--dialog-bgcolor: #444;
+	--dialog-color: #ddd;
 
-    --highlight-kwd-color: #f47;
-    --highlight-pln-color: #ccc;
-    --highlight-str-color: #0c0;
-    --highlight-pun-color: #999;
-    --highlight-typ-color: #0bc;
-    --highlight-com-color: #777;
+	--highlight-kwd-color: #f47;
+	--highlight-pln-color: #ccc;
+	--highlight-str-color: #0c0;
+	--highlight-pun-color: #999;
+	--highlight-typ-color: #0bc;
+	--highlight-com-color: #777;
 }
 
 .dark .editor {
-    color: var(--main-color);
+	color: var(--main-color);
 }
 
 .dark .editor::selection {
-    background: rgba(255, 255, 255, 0.2);
+	background: rgba(255, 255, 255, 0.2);
 }
 
 .dark .editor::-moz-selection {
-    background: rgba(255, 255, 255, 0.2);
+	background: rgba(255, 255, 255, 0.2);
 }
 
 .dark .shadow ol li::before {
-    color: rgba(255, 255, 255, 0.3);
+	color: rgba(255, 255, 255, 0.3);
 }
 
 .dark .log .status .prefix {
-    color: rgba(255, 255, 255, 0.5);
+	color: rgba(255, 255, 255, 0.5);
 }
 
 .dark .log .status.error {
-    color: #f66;
+	color: #f66;
 }
 
 /* Settings dialog */
 
 .settings-dialog {
-    padding: 0.5em 2em;
-    background: var(--dialog-bgcolor);
-    color: var(--dialog-color);
-    box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
-    display: inline-block;
-    right: 1.7em;
-    position: absolute;
-    top: 54px;
-    border: 1px solid var(--border-color);
+	padding: 0.5em 2em;
+	background: var(--dialog-bgcolor);
+	color: var(--dialog-color);
+	box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+	display: inline-block;
+	right: 1.7em;
+	position: absolute;
+	top: 54px;
+	border: 1px solid var(--border-color);
 }
 
 .tabwidth-2 {
-    -moz-tab-size: 2;
-    -o-tab-size: 2;
-    tab-size: 2;
+	-moz-tab-size: 2;
+	-o-tab-size: 2;
+	tab-size: 2;
 }
 
 .tabwidth-4 {
-    -moz-tab-size: 4;
-    -o-tab-size: 4;
-    tab-size: 4;
+	-moz-tab-size: 4;
+	-o-tab-size: 4;
+	tab-size: 4;
 }
 
 .tabwidth-6 {
-    -moz-tab-size: 6;
-    -o-tab-size: 6;
-    tab-size: 6;
+	-moz-tab-size: 6;
+	-o-tab-size: 6;
+	tab-size: 6;
 }
 
 .tabwidth-8 {
-    -moz-tab-size: 8;
-    -o-tab-size: 8;
-    tab-size: 8;
+	-moz-tab-size: 8;
+	-o-tab-size: 8;
+	tab-size: 8;
 }
 
 /* Splitters */
 
 .splitter {
-    background: #000;
-    position: absolute;
-    opacity: 0;
+	background: #000;
+	position: absolute;
+	opacity: 0;
 }
 
 .splitter:hover,
 .splitter.moving {
-    opacity: 0.1;
+	opacity: 0.1;
 }
 
 .splitter.col {
-    left: 0;
-    top: 0;
-    height: 100%;
-    width: 5px;
-    cursor: col-resize;
+	left: 0;
+	top: 0;
+	height: 100%;
+	width: 5px;
+	cursor: col-resize;
 }
 
 .splitter.row {
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 5px;
-    cursor: row-resize;
+	left: 0;
+	top: 0;
+	width: 100%;
+	height: 5px;
+	cursor: row-resize;
 }
 
 /* Canvas */
 
 .canvas-lightbox {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    box-sizing: border-box;
-    padding: 25px;
-    z-index: 2;
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	box-sizing: border-box;
+	padding: 25px;
+	z-index: 2;
 }
 
 .canvas-wrapper {
-    position: relative;
-    width: 100%;
-    height: 100%;
-    background: rgba(255, 255, 255, 0.8);
-    border-radius: 5px;
-    overflow: hidden;
+	position: relative;
+	width: 100%;
+	height: 100%;
+	background: rgba(255, 255, 255, 0.8);
+	border-radius: 5px;
+	overflow: hidden;
 }
 
 canvas {
-    position: absolute;
-    width: 100%;
-    height: 100%;
+	position: absolute;
+	width: 100%;
+	height: 100%;
 }
 
 .gopher {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    box-sizing: border-box;
-    width: 50px;
-    height: 50px;
-    margin-left: -25px;
-    margin-top: -25px;
-    background-image: url(gopher_walk.svg);
-    background-repeat: no-repeat;
-    background-size: 250px; /* 5:1 ratio */
-    background-position: -100px 0px;
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	box-sizing: border-box;
+	width: 50px;
+	height: 50px;
+	margin-left: -25px;
+	margin-top: -25px;
+	background-image: url(gopher_walk.svg);
+	background-repeat: no-repeat;
+	background-size: 250px; /* 5:1 ratio */
+	background-position: -100px 0px;
 }
 
 .say-bubble {
-    position: absolute;
-    top: 0;
-    left: 0;
-    background: #fe9;
-    color: #000;
-    z-index: 2;
-    padding: 0.2em 0.5em;
-    border-radius: 1em;
-    box-shadow: 0 0 2px #000, 0 0 2px #000;
-    opacity: 0; /* initial value */
+	position: absolute;
+	top: 0;
+	left: 0;
+	background: #fe9;
+	color: #000;
+	z-index: 2;
+	padding: 0.2em 0.5em;
+	border-radius: 1em;
+	box-shadow: 0 0 2px #000, 0 0 2px #000;
+	opacity: 0; /* initial value */
 }
 
 .say-bubble.animate {
-    -webkit-animation: say-bubble 3s linear;
-    -moz-animation: say-bubble 3s linear;
-    animation: say-bubble 3s linear;
+	-webkit-animation: say-bubble 3s linear;
+	-moz-animation: say-bubble 3s linear;
+	animation: say-bubble 3s linear;
 }
 @-moz-keyframes say-bubble {
-    0% {
-        -moz-transform: scale(0.8);
-    }
+	0% {
+		-moz-transform: scale(0.8);
+	}
 
-    10% {
-        opacity: 1;
-        -moz-transform: scale(1);
-    }
+	10% {
+		opacity: 1;
+		-moz-transform: scale(1);
+	}
 
-    90% {
-        opacity: 1;
-        -moz-transform: scale(1);
-    }
+	90% {
+		opacity: 1;
+		-moz-transform: scale(1);
+	}
 
-    100% {
-        -moz-transform: scale(1.2);
-    }
+	100% {
+		-moz-transform: scale(1.2);
+	}
 }
 @-webkit-keyframes say-bubble {
-    0% {
-        -webkit-transform: scale(0.8);
-    }
+	0% {
+		-webkit-transform: scale(0.8);
+	}
 
-    10% {
-        opacity: 1;
-        -webkit-transform: scale(1);
-    }
+	10% {
+		opacity: 1;
+		-webkit-transform: scale(1);
+	}
 
-    90% {
-        opacity: 1;
-        -webkit-transform: scale(1);
-    }
+	90% {
+		opacity: 1;
+		-webkit-transform: scale(1);
+	}
 
-    100% {
-        -webkit-transform: scale(1.2) translateY(-20px);
-    }
+	100% {
+		-webkit-transform: scale(1.2) translateY(-20px);
+	}
 }
 @keyframes say-bubble {
-    0% {
-        transform: scale(0.8);
-    }
+	0% {
+		transform: scale(0.8);
+	}
 
-    10% {
-        opacity: 1;
-        transform: scale(1) translateY(-50px);
-    }
+	10% {
+		opacity: 1;
+		transform: scale(1) translateY(-50px);
+	}
 
-    90% {
-        opacity: 1;
-        transform: scale(1) translateY(-50px);
-    }
+	90% {
+		opacity: 1;
+		transform: scale(1) translateY(-50px);
+	}
 
-    100% {
-        transform: scale(1.2) translateY(-100px);
-    }
+	100% {
+		transform: scale(1.2) translateY(-100px);
+	}
 }
 
 /* we only need this wrapper to set z-index and fix the issue
 of bleeding corners (statusbar corners will show up even if its
 parent has a border radius) */
 .statusbar-wrapper {
-    position: relative;
-    width: 100%;
-    height: 100%;
-    border-radius: 5px;
-    overflow: hidden;
-    z-index: 3;
+	position: relative;
+	width: 100%;
+	height: 100%;
+	border-radius: 5px;
+	overflow: hidden;
+	z-index: 3;
 }
 
 .statusbar-wrapper .statusbar {
-    position: absolute;
-    left: 0;
-    bottom: 0;
-    box-sizing: border-box;
-    width: 100%;
-    padding: 0.5em;
-    background: rgba(0, 0, 0, 0.2);
-    color: rgba(0, 0, 0, 0.5);
-    text-align: center;
+	position: absolute;
+	left: 0;
+	bottom: 0;
+	box-sizing: border-box;
+	width: 100%;
+	padding: 0.5em;
+	background: rgba(0, 0, 0, 0.2);
+	color: rgba(0, 0, 0, 0.5);
+	text-align: center;
 }
 
 .canvas-wrapper .statusbar kbd {
-    background: rgba(0, 0, 0, 0.2);
-    padding: 0.1em 0.3em;
-    border-radius: 3px;
-    color: rgba(255, 255, 255, 0.7);
+	background: rgba(0, 0, 0, 0.2);
+	padding: 0.1em 0.3em;
+	border-radius: 3px;
+	color: rgba(255, 255, 255, 0.7);
 }
 
 body.drawingmode {
-    user-select: none;
+	user-select: none;
 }
 
 body.drawingmode .header,
 body.drawingmode .content-wrapper,
 body.drawingmode .log-wrapper {
-    -webkit-filter: blur(5px);
-    -moz-filter: blur(5px);
-    -o-filter: blur(5px);
-    -ms-filter: blur(5px);
-    filter: blur(5px);
+	-webkit-filter: blur(5px);
+	-moz-filter: blur(5px);
+	-o-filter: blur(5px);
+	-ms-filter: blur(5px);
+	filter: blur(5px);
 }
