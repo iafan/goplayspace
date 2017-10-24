@@ -212,7 +212,7 @@ func (ed *Editor) WrapSelection(begin, end string) {
 // SetText replaces the editor text
 func (ed *Editor) SetText(text string) {
 	if ed.ta == nil {
-		console.Log("editor.SetText() getTextarea() is nil")
+		console.Log("editor.SetText(): getTextarea() is nil")
 		return
 	}
 	ed.saveState()
