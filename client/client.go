@@ -15,6 +15,7 @@ func main() {
 		FontWeight:       localstorage.Get("font-weight", "normal"),
 		UseWebfont:       localstorage.GetBool("use-webfont", false),
 		HighlightingMode: localstorage.GetBool("highlighting", true),
+		ShowSidebar:      localstorage.GetBool("show-sidebar", true),
 	}
 
 	vecty.RenderBody(a)

@@ -55,6 +55,7 @@ type Application struct {
 	FontWeight       string
 	UseWebfont       bool
 	HighlightingMode bool
+	ShowSidebar      bool
 
 	Hash      *hash.Hash
 	snippetID string
@@ -483,6 +484,12 @@ func (a *Application) updateHighlighting(on bool) {
 	a.wantRerender("updateHighlighting")
 }
 
+func (a *Application) updateShowSidebar(val bool) {
+	a.ShowSidebar = val
+	localstorage.Set("show-sidebar", val)
+	a.wantRerender("updateShowSidebar")
+}
+
 func (a *Application) onSettingsChange(d *settings.Dialog) {
 	if d.Theme != a.Theme {
 		a.updateTheme(d.Theme)
@@ -502,6 +509,10 @@ func (a *Application) onSettingsChange(d *settings.Dialog) {
 
 	if d.HighlightingMode != a.HighlightingMode {
 		a.updateHighlighting(d.HighlightingMode)
+	}
+
+	if d.ShowSidebar != a.ShowSidebar {
+		a.updateShowSidebar(d.ShowSidebar)
 	}
 }
 
@@ -573,11 +584,16 @@ func (a *Application) Render() *vecty.HTML {
 		}
 	}
 
+	topicHandler := a.onEditorTopicChange
+	if !a.ShowSidebar {
+		topicHandler = nil
+	}
+
 	a.editor = &editor.Editor{
 		Highlighter:      a.highlight,
 		OnChange:         a.onEditorValueChange,
 		OnLineSelChange:  a.onLineSelChange,
-		OnTopicChange:    a.onEditorTopicChange,
+		OnTopicChange:    topicHandler,
 		OnKeyDown:        a.onEditorKeyDown,
 		WarningLines:     a.warningLines,
 		ErrorLines:       a.errorLines,
@@ -605,6 +621,7 @@ func (a *Application) Render() *vecty.HTML {
 			vecty.MarkupIf(util.IsSafari(), vecty.Class("safari")),
 			vecty.MarkupIf(util.IsIOS(), vecty.Class("ios")),
 			vecty.MarkupIf(a.isDrawingMode, vecty.Class("drawingmode")),
+			vecty.MarkupIf(a.ShowSidebar, vecty.Class("withsidebar")),
 		),
 		elem.Div(
 			vecty.Markup(
@@ -668,7 +685,7 @@ func (a *Application) Render() *vecty.HTML {
 					vecty.Class("content-wrapper"),
 				),
 				a.editor,
-				elem.Div(
+				vecty.If(a.ShowSidebar, elem.Div(
 					vecty.Markup(
 						vecty.Class("help-wrapper"),
 					),
@@ -695,7 +712,7 @@ func (a *Application) Render() *vecty.HTML {
 						MinSizePercent:   2,
 						OnChange:         a.onResize,
 					},
-				),
+				)),
 			),
 			elem.Div(
 				vecty.Markup(
@@ -716,6 +733,7 @@ func (a *Application) Render() *vecty.HTML {
 			FontWeight:       a.FontWeight,
 			UseWebfont:       a.UseWebfont,
 			HighlightingMode: a.HighlightingMode,
+			ShowSidebar:      a.ShowSidebar,
 			OnChange:         a.onSettingsChange,
 		}),
 		vecty.If(a.isDrawingMode, &drawboard.DrawBoard{

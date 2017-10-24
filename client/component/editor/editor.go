@@ -554,7 +554,7 @@ func (ed *Editor) Render() *vecty.HTML {
 
 	return elem.Div(
 		vecty.Markup(
-			vecty.Class("scroller"),
+			vecty.Class("editor-wrapper"),
 			event.MouseDown(ed.handleScrollerClick),
 		),
 		elem.TextArea(

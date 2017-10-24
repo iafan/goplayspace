@@ -168,7 +168,7 @@ button cmd {
 	box-sizing: border-box;
 }
 
-.scroller,
+body.withsidebar .editor-wrapper,
 .help-wrapper {
 	position: absolute;
 	top: 0;
@@ -177,10 +177,10 @@ button cmd {
 	box-sizing: border-box;
 }
 
-.scroller {
-    left: 0;
-    border-right: 1px solid var(--border-color);
-    overflow: auto;
+body.withsidebar .editor-wrapper {
+	left: 0;
+	border-right: 1px solid var(--border-color);
+	overflow: auto;
 }
 
 .help-wrapper {

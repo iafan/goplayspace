@@ -17,6 +17,7 @@ type Dialog struct {
 	FontWeight       string `vecty:"prop"`
 	UseWebfont       bool   `vecty:"prop"`
 	HighlightingMode bool   `vecty:"prop"`
+	ShowSidebar      bool   `vecty:"prop"`
 
 	OnChange func(d *Dialog)
 }
@@ -52,6 +53,11 @@ func (d *Dialog) updateUseWebfont(e *vecty.Event) {
 
 func (d *Dialog) updateHighlighting(e *vecty.Event) {
 	d.HighlightingMode = e.Target.Get("checked").Bool()
+	d.fireOnChangeEvent()
+}
+
+func (d *Dialog) updateShowSidebar(e *vecty.Event) {
+	d.ShowSidebar = e.Target.Get("checked").Bool()
 	d.fireOnChangeEvent()
 }
 
@@ -178,14 +184,14 @@ func (d *Dialog) Render() *vecty.HTML {
 				elem.Option(
 					vecty.Markup(
 						vecty.Property("value", ""),
-						vecty.Property("selected", !d.UseWebfont),
+						vecty.MarkupIf(!d.UseWebfont, vecty.Property("selected", "true")),
 					),
 					vecty.Text("System"),
 				),
 				elem.Option(
 					vecty.Markup(
 						vecty.Property("value", 1),
-						vecty.Property("selected", d.UseWebfont),
+						vecty.MarkupIf(d.UseWebfont, vecty.Property("selected", "true")),
 					),
 					vecty.Text("Webfont"),
 				),
@@ -196,7 +202,7 @@ func (d *Dialog) Render() *vecty.HTML {
 				vecty.Markup(
 					vecty.Property("id", "highlighting"),
 					vecty.Property("type", "checkbox"),
-					vecty.Property("checked", d.HighlightingMode),
+					vecty.MarkupIf(d.HighlightingMode, vecty.Property("checked", "true")),
 					event.Change(d.updateHighlighting),
 				),
 			),
@@ -205,6 +211,22 @@ func (d *Dialog) Render() *vecty.HTML {
 					vecty.Attribute("for", "highlighting"),
 				),
 				vecty.Text("Syntax highlighting"),
+			),
+		),
+		elem.Paragraph(
+			elem.Input(
+				vecty.Markup(
+					vecty.Property("id", "showsidebar"),
+					vecty.Property("type", "checkbox"),
+					vecty.MarkupIf(d.ShowSidebar, vecty.Property("checked", "true")),
+					event.Change(d.updateShowSidebar),
+				),
+			),
+			elem.Label(
+				vecty.Markup(
+					vecty.Attribute("for", "showsidebar"),
+				),
+				vecty.Text("Show help sidebar"),
 			),
 		),
 	)
