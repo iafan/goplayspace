@@ -523,7 +523,6 @@ func (a *Application) formatShortcutPressed(e interface{}) {
 
 // Mount implements the vecty.Mounter interface.
 func (a *Application) Mount() {
-
 	switch a.Hash.ID {
 	case "":
 		a.setEditorState(initialCode, initialCaretPos, initialCaretPos)
@@ -589,20 +588,22 @@ func (a *Application) Render() *vecty.HTML {
 		topicHandler = nil
 	}
 
-	a.editor = &editor.Editor{
-		Highlighter:      a.highlight,
-		OnChange:         a.onEditorValueChange,
-		OnLineSelChange:  a.onLineSelChange,
-		OnTopicChange:    topicHandler,
-		OnKeyDown:        a.onEditorKeyDown,
-		WarningLines:     a.warningLines,
-		ErrorLines:       a.errorLines,
-		Range:            ranges.New(a.Hash.Ranges),
-		ChangeTimer:      &a.changeTimer,
-		UndoStack:        a.undoStack,
-		HighlightingMode: a.HighlightingMode,
-		ReadonlyMode:     a.isDrawingMode,
+	if a.editor == nil {
+		a.editor = &editor.Editor{
+			Highlighter:     a.highlight,
+			OnChange:        a.onEditorValueChange,
+			OnLineSelChange: a.onLineSelChange,
+			OnTopicChange:   topicHandler,
+			OnKeyDown:       a.onEditorKeyDown,
+			ChangeTimer:     &a.changeTimer,
+			UndoStack:       a.undoStack,
+		}
 	}
+	a.editor.WarningLines = a.warningLines
+	a.editor.ErrorLines = a.errorLines
+	a.editor.Range = ranges.New(a.Hash.Ranges)
+	a.editor.HighlightingMode = a.HighlightingMode
+	a.editor.ReadonlyMode = a.isDrawingMode
 
 	a.log = &log.Log{
 		Error:  a.err,
