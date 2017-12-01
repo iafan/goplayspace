@@ -168,24 +168,32 @@ button cmd {
 	box-sizing: border-box;
 }
 
-body.withsidebar .editor-wrapper,
+.editor-wrapper,
 .help-wrapper {
 	position: absolute;
 	top: 0;
 	height: 100%;
-	width: 50%;
 	box-sizing: border-box;
 }
 
-body.withsidebar .editor-wrapper {
+.editor-wrapper {
 	left: 0;
-	border-right: 1px solid var(--border-color);
-	overflow: auto;
+	width: 100%;
+    overflow: auto;
 }
 
 .help-wrapper {
 	right: 0;
 	overflow: hidden;
+}
+
+body.withsidebar .editor-wrapper,
+body.withsidebar .help-wrapper {
+	width: 50%;
+}
+
+body.withsidebar .editor-wrapper {
+	border-right: 1px solid var(--border-color);
 }
 
 .editor,
