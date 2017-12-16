@@ -113,7 +113,7 @@ func (l *Log) Mount() {
 }
 
 // Render implements the vecty.Component interface.
-func (l *Log) Render() *vecty.HTML {
+func (l *Log) Render() vecty.ComponentOrHTML {
 	return elem.Div(
 		vecty.Markup(
 			vecty.Class("log"),

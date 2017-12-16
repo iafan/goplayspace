@@ -563,7 +563,7 @@ func (a *Application) handleKeyDown(e *vecty.Event) {
 }
 
 // Render renders the application
-func (a *Application) Render() *vecty.HTML {
+func (a *Application) Render() vecty.ComponentOrHTML {
 	//console.Time("app:render")
 	//defer console.TimeEnd("app:render")
 

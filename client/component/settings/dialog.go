@@ -68,7 +68,7 @@ func (d *Dialog) fireOnChangeEvent() {
 }
 
 // Render implements the vecty.Component interface.
-func (d *Dialog) Render() *vecty.HTML {
+func (d *Dialog) Render() vecty.ComponentOrHTML {
 	return elem.Div(
 		vecty.Markup(
 			vecty.Class("settings-dialog"),

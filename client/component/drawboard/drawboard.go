@@ -353,7 +353,7 @@ func (b *DrawBoard) SkipRender(prev vecty.Component) bool {
 }
 
 // Render implements the vecty.Component interface.
-func (b *DrawBoard) Render() *vecty.HTML {
+func (b *DrawBoard) Render() vecty.ComponentOrHTML {
 	util.Schedule(b.onRendered)
 
 	return elem.Div(

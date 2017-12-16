@@ -546,7 +546,7 @@ func (ed *Editor) Mount() {
 }
 
 // Render implements the vecty.Component interface.
-func (ed *Editor) Render() *vecty.HTML {
+func (ed *Editor) Render() vecty.ComponentOrHTML {
 	ed.updateStateFromRanges()
 	ed.updateStateFromWarnings()
 	ed.updateStateFromErrors()

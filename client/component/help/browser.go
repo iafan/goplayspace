@@ -58,7 +58,7 @@ func (h *Browser) getCachedURL() string {
 }
 
 // Render implements the vecty.Component interface.
-func (h *Browser) Render() *vecty.HTML {
+func (h *Browser) Render() vecty.ComponentOrHTML {
 	return elem.InlineFrame(
 		vecty.Markup(
 			vecty.Class("help-browser"),

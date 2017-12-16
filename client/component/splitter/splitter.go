@@ -140,7 +140,7 @@ func (s *Splitter) onDocumentMouseUp(e *vecty.Event) {
 }
 
 // Render implements the vecty.Component interface.
-func (s *Splitter) Render() *vecty.HTML {
+func (s *Splitter) Render() vecty.ComponentOrHTML {
 	return elem.Div(
 		vecty.Markup(
 			vecty.Class("splitter"),
