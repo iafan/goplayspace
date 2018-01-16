@@ -1,0 +1,14 @@
+[Unit]
+Description=Go Play Space Server
+Requires=network.target
+After=network.target
+
+[Install]
+WantedBy=multi-user.target
+
+[Service]
+User=goplayspace
+Group=goplayspace
+WorkingDirectory=/var/www/goplay.space/bin
+ExecStart=/var/www/goplay.space/bin/goplayspace
+Restart=always
