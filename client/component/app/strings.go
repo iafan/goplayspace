@@ -19,7 +19,7 @@ var helpHTML = `
 	<h2>Features</h2>
 
 	<ol>
-		<li><strong>New:</strong> an embedded <a href="#draw">Turtle graphics mode</a>. Intoduce Go to your kids, or have fun yourself!</li>
+		<li><strong>New:</strong> an embedded <a href="#draw">Turtle graphics mode</a>. Introduce Go to your kids, or have fun yourself!</li>
 		<li>Syntax highlighting, auto-closing braces and quotes, proper undo/redo, auto indentation</li>
 		<li>Smart help lookup: double-click on e.g. <code>package</code> keyword or <code>Println</code> function name in source code,
 		and you will see the relevant help topic. Try it!</li>
