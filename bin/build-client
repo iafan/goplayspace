@@ -6,5 +6,5 @@
 cd ../client
 gopherjs build -m *.go -o ../static/client.js
 cd ../static
-gzip --best --to-stdout client.js > client.js.gz
-gzip --best --to-stdout client.js.map > client.js.map.gz
+gzip -9 -c client.js > client.js.gz
+gzip -9 -c client.js.map > client.js.map.gz
